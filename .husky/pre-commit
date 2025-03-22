@@ -1,0 +1,7 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Validar formato de commits
+npx --no-install commitlint --from=HEAD~1
+# Ejecutar tests y linters
+npm run test && npm run lint

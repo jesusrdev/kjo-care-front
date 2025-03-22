@@ -1,0 +1,29 @@
+name: Angular CI
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Validar commits
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: wagoid/commitlint-github-action@v5
+        with:
+          configFile: commitlint.config.js [[8]]
+
+      # Configurar Node.js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      # Instalar dependencias y construir
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test -- --watch=false --browsers=ChromeHeadless
+      - run: npm run build -- --configuration=production
