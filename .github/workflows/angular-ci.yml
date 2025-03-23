@@ -1,4 +1,4 @@
-name: Angular CI
+name: Angular CI with Bun
 on:
   push:
     branches: [main, dev]
@@ -16,14 +16,14 @@ jobs:
         with:
           configFile: commitlint.config.js [[8]]
 
-      # Configurar Node.js
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'npm'
+      # Configurar Bun
+      - name: Install Bun
+        run: curl -fsSL https://bun.sh/install | bash
+      - name: Add Bun to PATH
+        run: echo "$HOME/.bun/bin" >> $GITHUB_PATH
 
       # Instalar dependencias y construir
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run test -- --watch=false --browsers=ChromeHeadless
-      - run: npm run build -- --configuration=production
+      - run: bun install
+      - run: bun run lint
+      - run: bun run test -- --watch=false --browsers=ChromeHeadless
+      - run: bun run build -- --configuration=production
