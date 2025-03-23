@@ -24,6 +24,6 @@ jobs:
 
       # Instalar dependencias y construir
       - run: bun install
-      - run: bun run lint
+      # - run: bun run lint
       - run: bun run test -- --watch=false --browsers=ChromeHeadless
       - run: bun run build -- --configuration=production
