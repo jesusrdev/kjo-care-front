@@ -62,19 +62,12 @@ export class KeycloakService {
   }
 
   logout() {
-    // Limpiar el estado al cerrar sesión
     this._isAuthenticated.set(false);
     this._userProfile.set(undefined);
     return this.keycloak.logout();
   }
 
   goToAccountManagement() {
-    if (this.keycloak && this._isAuthenticated()) {
-      const accountUrl = this.keycloak.createAccountUrl();
-      window.location.href = accountUrl;
-      return true;
-    }
-    console.error('No se puede redirigir a la gestión de cuenta: usuario no autenticado');
-    return false;
+    return this.keycloak.accountManagement()
   }
 }
