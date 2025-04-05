@@ -1,1 +1,9 @@
-export const environment = {};
+export const environment = {
+  production: true,
+  apiUrl: '',
+  keycloak: {
+    url: '',
+    realm: '',
+    clientId: ''
+  }
+};
