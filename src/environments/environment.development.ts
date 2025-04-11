@@ -3,7 +3,7 @@ export const environment = {
   apiUrl: 'http://localhost:8080/api/',
   keycloak: {
     url: 'http://localhost:9090',
-    realm: 'book-social-network',
-    clientId: 'bsn'
+    realm: 'kjo-care-realm-dev',
+    clientId: 'admin-cli'
   }
 };
