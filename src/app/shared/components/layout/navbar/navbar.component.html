@@ -1,0 +1,32 @@
+<div class="navbar bg-base-200 w-full shadow-sm border-b">
+  <div class="flex-none">
+    <label
+      for="my-drawer"
+      aria-label="open sidebar"
+      class="btn btn-square btn-ghost drawer-button lg:hidden"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        class="inline-block h-6 w-6 stroke-current"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"
+        ></path>
+      </svg>
+    </label>
+  </div>
+  <div class="flex-1">
+    <button class="btn btn-ghost text-lg lg:hidden">KJO Care Mind</button>
+  </div>
+
+  <div class="navbar-end mx-3 flex items-center gap-3">
+    <navbar-notifications />
+
+    <navbar-profile-button />
+  </div>
+</div>

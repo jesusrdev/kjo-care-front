@@ -4,6 +4,6 @@ export const environment = {
   keycloak: {
     url: 'http://localhost:9090',
     realm: 'kjo-care-realm-dev',
-    clientId: 'admin-cli'
+    clientId: 'kjo-care-client'
   }
 };
