@@ -33,8 +33,6 @@ export class KeycloakService {
 
   async init() {
     console.log("Autenticando al usuario...");
-    console.log(environment);
-    console.log(import.meta.env);
     const keycloak = this.initKeycloak();
 
     try {
