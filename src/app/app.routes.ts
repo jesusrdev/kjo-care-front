@@ -20,7 +20,22 @@ export const routes: Routes = [
       import('./shared/components/layout/dashboard/dashboard.component').then(
         (m) => m.DashboardComponent
       ),
-    children: [],
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./modules/dashboard/dashboard-page.component').then(
+            (m) => m.DashboardPageComponent
+          ),
+      },
+      {
+        path: 'blog-management',
+        loadComponent: () =>
+          import('./modules/blog/blog-page.component').then(
+            (m) => m.BlogPageComponent
+          ),
+      }
+    ],
     //canActivate: [authGuard]
   },
 ];

@@ -1,0 +1,23 @@
+<div class="dropdown dropdown-end">
+  <div tabindex="0" role="button" class="btn btn-square btn-ghost">...</div>
+  <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 shadow-sm w-36 space-y-1">
+    <li>
+      <modal-open-button
+        [modalName]="'modal_blog_detail_' + blog().id"
+        [label]="'View'"
+        [type]="'dropdown'"
+        class="p-0 w-full flex"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+             class="lucide lucide-eye mr-2 h-4 w-4">
+          <path
+            d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+      </modal-open-button>
+    </li>
+    <li><a>Editar</a></li>
+    <li><a>Eliminar</a></li>
+  </ul>
+</div>

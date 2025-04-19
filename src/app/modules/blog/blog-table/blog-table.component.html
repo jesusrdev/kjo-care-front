@@ -1,0 +1,57 @@
+<div class="overflow-x-auto">
+  <table class="table">
+    <thead>
+    <tr>
+      <th></th>
+      <th class="">Title</th>
+      <th>Author</th>
+      <th>Category</th>
+      <th>Date</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+
+      @for (blog of blogs(); track $index) {
+        <tr class="hover:bg-base-200">
+          <td>{{ blog.id }}</td>
+          <td class="min-w-64">
+            <p class="line-clamp-2 text-ellipsis text-wrap">
+              {{ blog.title }}
+            </p>
+          </td>
+          <td class="truncate">
+            {{ blog.user?.firstName }} {{ blog.user?.lastName }}
+          </td>
+          <td class="truncate">{{ blog.category?.name }}</td>
+          <td>{{ blog.publishedDate }}</td>
+          <td>
+            @if (blog.status == Status.Draft) {
+              <span class="badge badge-outline">Draft</span>
+            } @else {
+              <span class="badge badge-primary">Published</span>
+            }
+          </td>
+          <td class="flex items-center gap-1">
+            <modal-open-button
+              [modalName]="'modal_blog_detail_' + blog.id"
+              [type]="'icon'"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   class="lucide lucide-eye h-4 w-4">
+                <path
+                  d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </modal-open-button>
+            <button class="btn btn-circle btn-xs">*</button>
+            <button class="btn btn-circle btn-xs">X</button>
+          </td>
+        </tr>
+      }
+
+    </tbody>
+  </table>
+</div>

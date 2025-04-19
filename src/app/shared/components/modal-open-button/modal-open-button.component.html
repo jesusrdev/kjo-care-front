@@ -1,0 +1,10 @@
+<button
+  class="btn btn-ghost"
+  [ngClass]="{
+    'font-normal hover:bg-transparent btn-block justify-normal py-1.5 h-fit border-0 px-3': type() == 'dropdown',
+    'btn-circle items-center justify-center btn-xs': type() == 'icon',
+  }"
+  (click)="openModal()">
+  <ng-content></ng-content>
+  {{ label() }}
+</button>
