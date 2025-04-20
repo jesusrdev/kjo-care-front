@@ -42,3 +42,9 @@ export interface Comment {
   commentDate: string;
   commentParentId: number;
 }
+
+export interface FilterDTO {
+  search: string;
+  category: number;
+  status: string;
+}

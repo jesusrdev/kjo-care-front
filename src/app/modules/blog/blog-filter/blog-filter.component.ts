@@ -1,5 +1,5 @@
-import { Component, input } from '@angular/core';
-import { Category, Status } from '../../../core/models/blog';
+import { Component, effect, input, output, signal } from '@angular/core';
+import { Category, FilterDTO, Status } from '../../../core/models/blog';
 
 @Component({
   selector: 'blog-filter',
@@ -8,7 +8,26 @@ import { Category, Status } from '../../../core/models/blog';
 })
 export class BlogFilterComponent {
 
+  protected readonly Status = Status;
+
   categories = input.required<Category[]>();
 
-  protected readonly Status = Status;
+  onFilterChange = output<FilterDTO>();
+
+  search = signal<string>('');
+  category = signal<number>(0);
+  status = signal<string>('');
+
+  filterBlogs() {
+    this.onFilterChange.emit({
+      search: this.search(),
+      category: this.category(),
+      status: this.status()
+    });
+  }
+
+  // Do filterBlogs() when search or category or status changes
+  onValueChanges = effect(() => {
+    this.filterBlogs();
+  });
 }

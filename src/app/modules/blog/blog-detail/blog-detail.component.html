@@ -1,4 +1,4 @@
-<dialog id="{{ 'modal_blog_detail_' + blog().id }}" class="modal">
+<dialog id="{{ 'modal_blog_detail' }}" class="modal">
   <div class="modal-box w-11/12 max-w-xl max-h-11/12">
     <!-- X BUTTON -->
     <form method="dialog">
@@ -46,9 +46,23 @@
     </div>
 
     <div class="modal-action mt-4">
-      <form method="dialog">
-        <!-- if there is a button in form, it will close the modal -->
+      <form method="dialog" class="space-x-2">
         <button class="btn">Close</button>
+
+        <modal-open-button
+          [modalName]="'modal_blog_edit'"
+          [label]="'Edit'"
+          [classes]="'btn-primary'"
+          (click)="blogService.selectedBlog = blog()"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               class="lucide lucide-square-pen h-4 w-4 mr-2">
+            <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path
+              d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"></path>
+          </svg>
+        </modal-open-button>
       </form>
     </div>
   </div>

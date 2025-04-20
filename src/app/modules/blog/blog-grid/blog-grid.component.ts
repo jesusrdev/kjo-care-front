@@ -4,10 +4,10 @@ import { BlogCardComponent } from './blog-card/blog-card.component';
 
 @Component({
   selector: 'blog-grid',
+  templateUrl: './blog-grid.component.html',
   imports: [
     BlogCardComponent
-  ],
-  templateUrl: './blog-grid.component.html',
+  ]
 })
 export class BlogGridComponent {
 

@@ -1,1 +1,134 @@
-<button class="btn btn-md">+  New Blog</button>
+<dialog id="{{ nameModal() }}" class="modal">
+  <div class="modal-box max-h-11/12">
+    <!-- X BUTTON -->
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+
+    <h2 class="text-lg font-semibold">{{ title() }}</h2>
+
+    <form [formGroup]="blogForm" (ngSubmit)="onSubmit()">
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Title</legend>
+        <input
+          type="text"
+          class="input validator w-full"
+          formControlName="title"
+          placeholder="Title"
+          minlength="3"
+          required
+          autocomplete="off"
+        />
+        <p class="validator-hint hidden">
+          {{ formUtils.getFieldError(blogForm, 'title') }}
+        </p>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Content</legend>
+        <textarea
+          class="textarea validator w-full"
+          formControlName="content"
+          placeholder="Content"
+          required
+          minlength="5"
+          autocomplete="off"
+        ></textarea>
+        <p class="validator-hint hidden">
+          {{ formUtils.getFieldError(blogForm, 'content') }}
+        </p>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Image</legend>
+        <input
+          type="file"
+          class="file-input validator w-full"
+          formControlName="image"
+          autocomplete="off"
+        />
+        <p class="validator-hint hidden">
+          {{ formUtils.getFieldError(blogForm, 'image') }}
+        </p>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Video</legend>
+        <input
+          type="file"
+          accept="video/*"
+          class="file-input validator w-full"
+          formControlName="video"
+          autocomplete="off"
+        />
+        <p class="validator-hint hidden">
+          {{ formUtils.getFieldError(blogForm, 'video') }}
+        </p>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Category</legend>
+        <select
+          class="select validator w-full"
+          formControlName="category"
+          required
+          [ngClass]="{ '!input-error': formUtils.isValidField(blogForm, 'category') }"
+        >
+          <option disabled [ngValue]="0">-- Select category --</option>
+
+          @for (category of categories(); track $index) {
+            <option [ngValue]="category.id">{{ category.name }}</option>
+          }
+        </select>
+        <p class="validator-hint hidden">
+          {{ formUtils.getFieldError(blogForm, 'category') }}
+        </p>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Status</legend>
+        <select
+          class="select validator w-full"
+          formControlName="status"
+          required
+        >
+          <option disabled value="">-- Select status --</option>
+
+          <option [ngValue]="Status.Draft">Draft</option>
+          <option [ngValue]="Status.Published">Published</option>
+          <option [ngValue]="Status.Deleted">Deleted</option>
+        </select>
+        <p class="validator-hint hidden">
+          {{ formUtils.getFieldError(blogForm, 'status') }}
+        </p>
+      </fieldset>
+
+      <div class="modal-action mt-4">
+        <form method="dialog">
+          <button class="btn">Close</button>
+        </form>
+
+        <button
+          class="btn btn-primary"
+          [disabled]="blogForm.invalid"
+          type="submit"
+        >
+          {{ nameButton() }}
+        </button>
+      </div>
+    </form>
+
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+
+  @if (message()) {
+    <div class="toast toast-top toast-end z-[9999]">
+      <div class="alert alert-success">
+        <span>{{ message() }}</span>
+      </div>
+    </div>
+  }
+</dialog>
+

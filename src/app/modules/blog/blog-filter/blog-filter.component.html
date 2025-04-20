@@ -12,19 +12,36 @@
         <path d="m21 21-4.3-4.3"></path>
       </g>
     </svg>
-    <input type="search" class="grow" placeholder="Search" />
+    <input
+      type="search"
+      class="grow"
+      placeholder="Search posts..."
+      [value]="search()"
+      (input)="search.set(searchInput.value)"
+      #searchInput
+    />
   </label>
 
   <div class="flex gap-2 flex-1 *:flex-1">
-    <select class="select">
-      <option selected>All Categories</option>
+    <select
+      class="select"
+      [value]="category()"
+      (change)="category.set(+categorySelect.value)"
+      #categorySelect
+    >
+      <option value="0">All Categories</option>
       @for (category of categories(); track $index) {
         <option value="{{ category.id }}">{{ category.name }}</option>
       }
     </select>
 
-    <select class="select">
-      <option selected>All status</option>
+    <select
+      class="select"
+      [value]="status()"
+      (change)="status.set(statusSelect.value)"
+      #statusSelect
+    >
+      <option value="">All status</option>
       <option value="{{ Status.Published }}">{{ Status.Published }}</option>
       <option value="{{ Status.Draft }}">{{ Status.Draft }}</option>
       <option value="{{ Status.Deleted }}">{{ Status.Deleted }}</option>

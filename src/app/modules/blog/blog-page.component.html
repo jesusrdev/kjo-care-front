@@ -1,25 +1,39 @@
 <div class="flex justify-between items-center gap-2 flex-wrap">
   <h1 class="sm:text-3xl text-2xl font-bold">Blog Management</h1>
-  <blog-modal></blog-modal>
+  <modal-open-button
+    modalName="modal_blog_create"
+    [classes]="'btn-primary'"
+  >
+    + New Post
+  </modal-open-button>
 </div>
 
 <div class="py-6">
-  <blog-filter [categories]="categories()"></blog-filter>
+  <blog-filter
+    [categories]="categories()"
+    (onFilterChange)="filterBlogs($event)"
+  ></blog-filter>
 </div>
 
 <div class="tabs tabs-box">
   <input type="radio" name="blogs" class="tab" aria-label="Grid View" checked="checked" />
   <div class="tab-content bg-base-100 border-base-300 p-6">
-    <blog-grid [blogs]="blogs()"></blog-grid>
+    <blog-grid [blogs]="filteredBlogs()"></blog-grid>
   </div>
 
   <input type="radio" name="blogs" class="tab" aria-label="Table view" />
   <div class="tab-content bg-base-100 border-base-300 p-6">
-    <blog-table [blogs]="blogs()"></blog-table>
+    <blog-table [blogs]="filteredBlogs()"></blog-table>
   </div>
 </div>
 
 <!--SECTION FOR MODALS-->
-@for (blog of blogs(); track $index) {
-  <blog-detail [blog]="blog"></blog-detail>
-}
+<blog-detail [blog]="blogService.selectedBlog ?? blogs()[0]"></blog-detail>
+
+<blog-modal [categories]="categories()"></blog-modal>
+
+<blog-modal
+  [nameModal]="'modal_blog_edit'"
+  [categories]="categories()"
+  [blog]="blogService.selectedBlog"
+></blog-modal>

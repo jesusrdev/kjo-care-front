@@ -1,10 +1,12 @@
-import { Component, signal } from '@angular/core';
-import { Blog, Category, Status } from '../../core/models/blog';
+import { Component, inject, signal } from '@angular/core';
+import { Blog, Category, FilterDTO, Status } from '../../core/models/blog';
 import { BlogModalComponent } from './blog-modal/blog-modal.component';
 import { BlogGridComponent } from './blog-grid/blog-grid.component';
 import { BlogTableComponent } from './blog-table/blog-table.component';
 import { BlogFilterComponent } from './blog-filter/blog-filter.component';
 import { BlogDetailComponent } from './blog-detail/blog-detail.component';
+import { ModalOpenButtonComponent } from '../../shared/components/modal-open-button/modal-open-button.component';
+import { BlogService } from '../../core/services/blog.service';
 
 @Component({
   selector: 'app-blog',
@@ -13,11 +15,14 @@ import { BlogDetailComponent } from './blog-detail/blog-detail.component';
     BlogGridComponent,
     BlogTableComponent,
     BlogFilterComponent,
-    BlogDetailComponent
+    BlogDetailComponent,
+    ModalOpenButtonComponent
   ],
   templateUrl: './blog-page.component.html'
 })
 export class BlogPageComponent {
+
+  blogService = inject(BlogService);
 
   blogs = signal<Blog[]>([
     {
@@ -127,6 +132,7 @@ export class BlogPageComponent {
       }
     }
   ]);
+  filteredBlogs = signal<Blog[]>([]);
 
   categories = signal<Category[]>([
     {
@@ -143,4 +149,25 @@ export class BlogPageComponent {
     }
   ]);
 
+  ngOnInit(): void {
+    this.filteredBlogs.set(this.blogs());
+  }
+
+  filterBlogs(filter: FilterDTO) {
+    let temporal = this.blogs();
+
+    if (filter.search.length > 0) {
+      temporal = temporal.filter(blog => blog.title.toLowerCase().includes(filter.search.toLowerCase()));
+    }
+
+    if (filter.category > 0) {
+      temporal = temporal.filter(blog => blog.categoryId === filter.category);
+    }
+
+    if (filter.status.length > 0) {
+      temporal = temporal.filter(blog => blog.status === filter.status);
+    }
+
+    this.filteredBlogs.set(temporal);
+  }
 }

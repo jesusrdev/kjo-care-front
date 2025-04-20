@@ -11,6 +11,7 @@ import { NgClass } from '@angular/common';
 export class ModalOpenButtonComponent {
   modalName = input.required<string>();
   type = input<'text' | 'icon' | 'dropdown'>('text');
+  classes = input<string>();
   label = input<string>();
 
   openModal() {
