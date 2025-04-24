@@ -20,7 +20,7 @@ import { BlogService } from '../../core/services/blog.service';
   ],
   templateUrl: './blog-page.component.html'
 })
-export class BlogPageComponent {
+export default class BlogPageComponent {
 
   blogService = inject(BlogService);
 

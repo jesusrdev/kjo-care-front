@@ -12,6 +12,6 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
     SidebarComponent
   ]
 })
-export class DashboardComponent {
+export default class DashboardComponent {
 
 }
