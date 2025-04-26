@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { KeycloakService } from './modules/auth/services/keycloak.service';
 
 @Component({
   selector: 'app-root',
@@ -8,4 +9,13 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
+  keycloakService = inject(KeycloakService);
+
+  login() {
+    this.keycloakService.login();
+  }
+
+  ngOnInit() {
+    this.keycloakService.init();
+  }
 }

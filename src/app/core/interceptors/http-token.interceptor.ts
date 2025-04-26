@@ -9,7 +9,7 @@ export function httpTokenInterceptor(
 ): Observable<HttpEvent<unknown>> {
   const keycloakService = inject(KeycloakService);
   const token = keycloakService.keycloak.token;
-  console.log("Token:", token)
+  // console.log("Token:", token)
   if (token) {
     const authReq = request.clone({
       headers: request.headers.set('Authorization', `Bearer ${token}`)
