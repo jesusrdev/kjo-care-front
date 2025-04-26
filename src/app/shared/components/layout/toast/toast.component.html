@@ -1,0 +1,16 @@
+<div class="toast toast-top toast-end z-[9999]">
+  @for (toast of toastService.toasts(); track $index) {
+    <div class="alert" [ngClass]="{
+      'alert-success': toast.type === 'success',
+      'alert-error': toast.type === 'error',
+      'alert-info': toast.type === 'info',
+      'alert-warning': toast.type === 'warning',
+    }">
+      <div class="flex-1">
+        <p class="text-sm font-medium">
+          {{ toast.message }}
+        </p>
+      </div>
+    </div>
+  }
+</div>
