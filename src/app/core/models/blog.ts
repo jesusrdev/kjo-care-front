@@ -2,17 +2,17 @@ import { UserProfile } from './user-profile';
 
 export interface Blog {
   id: number;
-  userId: number;
-  categoryId: number;
   title: string;
   content: string;
   image?: string;
   video?: string;
   publishedDate: string;
-  modificationDate: string;
+  modifiedDate: string;
   status: Status;
-  user?: UserProfile;
+  author?: UserProfile;
   category?: Category;
+  reactionCount?: number;
+  commentCount?: number;
 }
 
 export enum Status {

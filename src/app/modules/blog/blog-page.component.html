@@ -11,14 +11,22 @@
 <div class="py-6">
   <blog-filter
     [categories]="categories()"
-    (onFilterChange)="filterBlogs($event)"
+    (onFilterChange)="setFilter($event)"
   ></blog-filter>
 </div>
 
 <div class="tabs tabs-box">
   <input type="radio" name="blogs" class="tab" aria-label="Grid View" checked="checked" />
   <div class="tab-content bg-base-100 border-base-300 p-6">
-    <blog-grid [blogs]="filteredBlogs()"></blog-grid>
+    @if (blogs.isLoading()) {
+      <div class="flex justify-center items-center h-screen">
+        <div class="spinner-border text-primary-content" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    } @else {
+      <blog-grid [blogs]="filteredBlogs()"></blog-grid>
+    }
   </div>
 
   <input type="radio" name="blogs" class="tab" aria-label="Table view" />
@@ -28,12 +36,13 @@
 </div>
 
 <!--SECTION FOR MODALS-->
-<blog-detail [blog]="blogService.selectedBlog ?? blogs()[0]"></blog-detail>
+<blog-detail [blog]="blogService.selectedBlog"></blog-detail>
 
-<blog-modal [categories]="categories()"></blog-modal>
+<blog-modal [categories]="categories()" (reload)="reload()"></blog-modal>
 
 <blog-modal
-  [nameModal]="'modal_blog_edit'"
+  [type]="'edit'"
   [categories]="categories()"
   [blog]="blogService.selectedBlog"
+  (reload)="reload()"
 ></blog-modal>

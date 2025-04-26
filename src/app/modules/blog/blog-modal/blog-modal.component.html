@@ -45,7 +45,9 @@
           type="file"
           class="file-input validator w-full"
           formControlName="image"
+          accept="image/*"
           autocomplete="off"
+          (change)="onFileChange($event, 'image')"
         />
         <p class="validator-hint hidden">
           {{ formUtils.getFieldError(blogForm, 'image') }}
@@ -60,6 +62,7 @@
           class="file-input validator w-full"
           formControlName="video"
           autocomplete="off"
+          (change)="onFileChange($event, 'video')"
         />
         <p class="validator-hint hidden">
           {{ formUtils.getFieldError(blogForm, 'video') }}
@@ -70,9 +73,9 @@
         <legend class="fieldset-legend">Category</legend>
         <select
           class="select validator w-full"
-          formControlName="category"
+          formControlName="categoryId"
           required
-          [ngClass]="{ '!input-error': formUtils.isValidField(blogForm, 'category') }"
+          [ngClass]="{ '!input-error': formUtils.isValidField(blogForm, 'categoryId') }"
         >
           <option disabled [ngValue]="0">-- Select category --</option>
 
@@ -81,40 +84,23 @@
           }
         </select>
         <p class="validator-hint hidden">
-          {{ formUtils.getFieldError(blogForm, 'category') }}
-        </p>
-      </fieldset>
-
-      <fieldset class="fieldset">
-        <legend class="fieldset-legend">Status</legend>
-        <select
-          class="select validator w-full"
-          formControlName="status"
-          required
-        >
-          <option disabled value="">-- Select status --</option>
-
-          <option [ngValue]="Status.Draft">Draft</option>
-          <option [ngValue]="Status.Published">Published</option>
-          <option [ngValue]="Status.Deleted">Deleted</option>
-        </select>
-        <p class="validator-hint hidden">
-          {{ formUtils.getFieldError(blogForm, 'status') }}
+          {{ formUtils.getFieldError(blogForm, 'categoryId') }}
         </p>
       </fieldset>
 
       <div class="modal-action mt-4">
         <form method="dialog">
           <button class="btn">Close</button>
+
+          <button
+            class="btn btn-primary"
+            [disabled]="blogForm.invalid"
+            type="submit"
+          >
+            {{ nameButton() }}
+          </button>
         </form>
 
-        <button
-          class="btn btn-primary"
-          [disabled]="blogForm.invalid"
-          type="submit"
-        >
-          {{ nameButton() }}
-        </button>
       </div>
     </form>
 
