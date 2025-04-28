@@ -38,28 +38,6 @@
 
         <div class="form-control mt-4">
           <label class="label">
-            <span class="label-text">Stado</span>
-            @if (stateControl?.invalid && stateControl?.touched) {
-              <span class="label-text-alt text-error">State is required</span>
-            }
-          </label>
-          <select
-            class="select select-bordered w-full"
-            formControlName="state"
-            [class.select-error]="
-              stateControl?.invalid && stateControl?.touched
-            "
-          >
-            @for (stateOption of states; track stateOption.value) {
-              <option [value]="stateOption.value">
-                {{ stateOption.label }}
-              </option>
-            }
-          </select>
-        </div>
-
-        <div class="form-control mt-4">
-          <label class="label">
             <span class="label-text">Color</span>
             @if (colorControl?.invalid && colorControl?.touched) {
               <span class="label-text-alt text-error"
@@ -127,23 +105,6 @@
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="form-control mt-4">
-          <label class="label cursor-pointer">
-            <span class="label-text">Active</span>
-            <input
-              type="checkbox"
-              formControlName="enabled"
-              class="toggle toggle-success"
-            />
-          </label>
-        </div>
-
-        <div class="bg-base-200 p-2 rounded-lg mt-4 text-sm">
-          <p class="font-semibold">Form values:</p>
-          <pre>{{ moodForm.value | json }}</pre>
-          <p class="font-semibold mt-2">Form valid: {{ moodForm.valid }}</p>
         </div>
       </form>
 

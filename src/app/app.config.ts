@@ -2,7 +2,7 @@ import { ApplicationConfig, inject, provideAppInitializer, provideZoneChangeDete
 import { provideRouter, withViewTransitions } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { httpTokenInterceptor } from './core/interceptors/http-token.interceptor';
 import { KeycloakService } from './modules/auth/services/keycloak.service';
 export function kcFactory() {
@@ -22,7 +22,7 @@ export const appConfig: ApplicationConfig = {
 
     ),
     provideHttpClient(
-      withInterceptors([httpTokenInterceptor])
+      withInterceptors([httpTokenInterceptor]), withFetch()
     ),
     provideAppInitializer(kcFactory)
   ]

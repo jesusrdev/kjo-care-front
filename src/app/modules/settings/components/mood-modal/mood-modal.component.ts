@@ -1,13 +1,8 @@
 import { ChangeDetectionStrategy, Component, input, OnInit, output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-export interface MoodState {
-  name: string;
-  color: string;
-  enabled: boolean;
-  description?: string;
-  state?: string;
-}
+import { Content } from '../../../../core/models/mood.model';
+
 @Component({
   selector: 'app-mood-modal',
   imports: [CommonModule, ReactiveFormsModule],
@@ -24,24 +19,26 @@ export interface MoodState {
 })
 export class MoodModalComponent implements OnInit {
   modalId = input<string>("mood_editor_modal");
-  mood = input<MoodState>({ name: "", color: "#6d28d9", enabled: true, description: "", state: "active" });
+  mood = input<Content>({
+    id: 0,
+    name: "",
+    color: "#6d28d9",
+    isActive: true,
+    description: "",
+    state: "active",
+    image: ""
+  });
   isNewMood = input<boolean>(false);
 
-  save = output<MoodState>();
+  save = output<Content>();
   cancel = output<void>();
 
   moodForm!: FormGroup;
 
-  states = [
-    { value: 'active', label: 'Activo' },
-    { value: 'inactive', label: 'Inactivo' },
-    { value: 'pending', label: 'Pendiente Revision' }
-  ];
-
 
   colorPresets: string[] = [
     "#FF5252", "#E040FB", "#7C4DFF", "#536DFE",
-    "#448AFF", "#40C4FF", "#18FFFF",
+    "#448AFF", "#40C4FF", "#18FFFF"
   ];
 
   constructor(private fb: FormBuilder) { }
@@ -57,8 +54,6 @@ export class MoodModalComponent implements OnInit {
       name: [currentMood.name, [Validators.required, Validators.minLength(2)]],
       color: [currentMood.color, Validators.required],
       description: [currentMood.description || ''],
-      state: [currentMood.state || 'active', Validators.required],
-      enabled: [currentMood.enabled]
     });
   }
 
@@ -76,7 +71,8 @@ export class MoodModalComponent implements OnInit {
       return;
     }
 
-    const updatedMood: MoodState = {
+    const updatedMood: Content = {
+      ...this.mood(),
       ...this.moodForm.value
     };
 
@@ -98,5 +94,5 @@ export class MoodModalComponent implements OnInit {
 
   get nameControl() { return this.moodForm.get('name'); }
   get colorControl() { return this.moodForm.get('color'); }
-  get stateControl() { return this.moodForm.get('state'); }
+  get isActiveControl() { return this.moodForm.get('isActive'); }
 }

@@ -1,63 +1,117 @@
 <div class="p-6">
   <h2 class="text-2xl font-bold mb-4">
-    Configuracion de los Estados de Animos
+    Configuración de los Estados de Ánimos
   </h2>
 
-  @for (mood of moodStates(); track mood.name; let i = $index) {
-    <div
-      class="flex items-center justify-between bg-base-100 rounded p-4 mb-2 shadow hover:shadow-md transition-shadow"
-    >
-      <div class="flex items-center gap-4">
-        <span
-          class="w-4 h-4 rounded-full"
-          [style.backgroundColor]="mood.color"
-        ></span>
-        <span>{{ mood.name }}</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <button
-          class="btn btn-sm"
-          [class.btn-error]="mood.enabled"
-          [class.btn-success]="!mood.enabled"
-          (click)="toggleMood(i)"
-        >
-          {{ mood.enabled ? "Disable" : "Enable" }}
-        </button>
-        <button class="btn btn-sm btn-ghost" (click)="editMood(i)">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-5 h-5"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125"
-            />
-          </svg>
-        </button>
-      </div>
+  @if (loadMoodTracking.isLoading()) {
+    <div class="flex justify-center p-8">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
     </div>
-  } @empty {
-    <div class="alert alert-info">
+  } @else if (loadMoodTracking.error()) {
+    <div class="alert alert-error">
       <svg
         xmlns="http://www.w3.org/2000/svg"
+        class="stroke-current shrink-0 h-6 w-6"
         fill="none"
         viewBox="0 0 24 24"
-        class="stroke-current shrink-0 w-6 h-6"
       >
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
           stroke-width="2"
-          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-        ></path>
+          d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
       </svg>
-      <span>Ningun estado de animo. Añade un estado de animo.</span>
+      <span
+        >Error al cargar los estados de ánimo. Por favor intenta de nuevo.</span
+      >
+      <button class="btn btn-sm" (click)="loadMoodTracking.reload()">
+        Reintentar
+      </button>
     </div>
+  } @else {
+    @for (mood of loadMoodTracking.value()?.content; track mood.id; let i = $index) {
+      <div
+        class="flex items-center justify-between bg-base-100 rounded p-4 mb-2 shadow hover:shadow-md transition-shadow"
+      >
+        <div class="flex items-center gap-4">
+          <span
+            class="w-4 h-4 rounded-full"
+            [style.backgroundColor]="mood.color"
+          ></span>
+          <span>{{ mood.name }}</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="form-control">
+            <label class="label cursor-pointer gap-2">
+              <span class="label-text text-xs">{{
+                mood.isActive ? "Activo" : "Inactivo"
+              }}</span>
+              <input
+                type="checkbox"
+                class="toggle toggle-primary toggle-sm"
+                [checked]="mood.isActive"
+                (change)="toggleMoodState(mood.id)"
+              />
+            </label>
+          </div>
+
+          <button class="btn btn-ghost btn-sm" (click)="editMood(i)">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-4 h-4"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125"
+              />
+            </svg>
+          </button>
+
+          <button
+            class="btn btn-ghost btn-sm text-error"
+            (click)="deleteMood(mood.id)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-4 h-4"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    } @empty {
+      <div class="alert alert-info">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          class="stroke-current shrink-0 w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          ></path>
+        </svg>
+        <span>Ningún estado de ánimo. Añade un estado de ánimo.</span>
+      </div>
+    }
   }
 
   <div class="flex gap-2 mt-4">
@@ -76,124 +130,39 @@
           d="M12 4.5v15m7.5-7.5h-15"
         />
       </svg>
-      Add New Mood State
-    </button>
-    <button
-      class="btn btn-success"
-      (click)="saveChanges()"
-      [disabled]="isSaving()"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-        class="w-5 h-5 mr-1"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"
-        />
-      </svg>
-      {{ isSaving() ? "Saving..." : "Save Changes" }}
+      Añadir Nuevo Estado de Ánimo
     </button>
   </div>
-
-  <div class="divider my-6"></div>
-  <h2 class="text-2xl font-bold mb-4">Configuracion de Mood Tracking</h2>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div class="form-control w-full max-w-xs">
-      <label class="label">
-        <span class="label-text">Frecuencia por Defecto</span>
-      </label>
-      <select
-        class="select select-bordered"
-        [value]="trackingFrequency()"
-        (change)="updateTrackingFrequency($event)"
-      >
-        <option value="Daily">Diario</option>
-        <option value="Weekly">Semanal</option>
-        <option value="Monthly">Mensual</option>
-      </select>
-    </div>
-
-    <div class="form-control w-full max-w-xs">
-      <label class="label">
-        <span class="label-text">Data Retention Period</span>
-      </label>
-      <select
-        class="select select-bordered"
-        [value]="retentionPeriod()"
-        (change)="updateRetentionPeriod($event)"
-      >
-        <option>1 mes</option>
-        <option>12 meses</option>
-        <option>36 meses</option>
-        <option>Siempre</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="form-control mt-4 w-full max-w-sm">
-    <label class="cursor-pointer label justify-start gap-4">
-      <input
-        type="checkbox"
-        class="toggle toggle-success"
-        [checked]="remindersEnabled()"
-        (change)="updateRemindersEnabled($event)"
-      />
-      <span class="label-text">Enable mood tracking reminders</span>
-    </label>
-
-    @if (remindersEnabled()) {
-      <div class="mt-4 pl-10">
-        <label class="label">
-          <span class="label-text">Reminder Time</span>
-        </label>
-        <input
-          type="time"
-          class="input input-bordered w-full max-w-xs"
-          [value]="reminderTime()"
-          (change)="updateReminderTime($event)"
-        />
-      </div>
-    }
-  </div>
-
-  <button
-    class="btn btn-success mt-8"
-    (click)="saveChanges()"
-    [disabled]="isSaving()"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke-width="1.5"
-      stroke="currentColor"
-      class="w-5 h-5 mr-1"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M9 3.75H6.912a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859M12 3v8.25m0 0-3-3m3 3 3-3"
-      />
-    </svg>
-    {{ isSaving() ? "Saving..." : "Save Settings" }}
-  </button>
 </div>
 
-@if (editingMood) {
+@if (editingMood()) {
   <app-mood-modal
     [modalId]="'mood_editor_modal'"
-    [mood]="editingMood"
+    [mood]="editingMood()!"
     [isNewMood]="isNewMood()"
     (save)="handleSaveMood($event)"
     (cancel)="cancelEdit()"
   ></app-mood-modal>
 }
+
+<dialog
+  id="delete_confirmation_modal"
+  class="modal modal-bottom sm:modal-middle"
+>
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Confirmar eliminación</h3>
+    <p class="py-4">
+      ¿Estás seguro que deseas eliminar este estado de ánimo? Esta acción no se
+      puede deshacer.
+    </p>
+    <div class="modal-action">
+      <form method="dialog">
+        <button class="btn btn-outline mr-2">Cancelar</button>
+      </form>
+      <button class="btn btn-error" (click)="confirmDelete()">Eliminar</button>
+    </div>
+  </div>
+</dialog>
 
 @if (showSuccessToast()) {
   <div class="toast toast-top toast-end z-[9999]">
@@ -211,7 +180,7 @@
           d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
         />
       </svg>
-      <span>Configuracion guardada exitosamente!</span>
+      <span>{{ successMessage() }}</span>
     </div>
   </div>
 }
