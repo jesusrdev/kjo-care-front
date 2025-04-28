@@ -26,7 +26,7 @@
           <td class="truncate">{{ blog.category?.name }}</td>
           <td>{{ blog.publishedDate }}</td>
           <td>
-            @if (blog.status == Status.Draft) {
+            @if (blog.state == Status.Draft) {
               <span class="badge badge-outline">Draft</span>
             } @else {
               <span class="badge badge-primary">Published</span>
