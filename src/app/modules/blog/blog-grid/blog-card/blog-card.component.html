@@ -1,0 +1,41 @@
+<div class="card bg-base-100 shadow-sm border-[0.5px] border-base-300 h-full">
+  <div class="card-body justify-between">
+    <div class="flex flex-col">
+      <div class="flex items-center justify-between">
+        <h2 class="card-title line-clamp-2">{{ blog().blog.title }}</h2>
+        <blog-card-options-button [blog]="blog()" />
+      </div>
+      <div class="flex items-center gap-2 text-xs opacity-80">
+        <span class="truncate">By {{ blog().blog.author?.firstName }} {{ blog().blog.author?.lastName }}</span>
+        <span>•</span>
+        <span>
+        <!-- CALENDAR ICON HERE -->
+          {{ blog().blog.publishedDate }}
+      </span>
+      </div>
+      <p class="text-sm line-clamp-3 my-3 opacity-80">{{ blog().blog.content }}</p>
+    </div>
+    <div class="card-actions justify-between items-center">
+      @if (blog().blog.state == Status.Published) {
+        <div class="badge badge-primary">Published</div>
+      } @else if (blog().blog.state == Status.Draft) {
+        <div class="badge badge-outline">Draft</div>
+      } @else if (blog().blog.state == Status.Deleted) {
+        <div class="badge badge-error">Deleted</div>
+      }
+      <modal-open-button
+        [modalName]="'modal_blog_detail'"
+        [label]="'View'"
+        (click)="blogService.selectedBlog = blog()"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye mr-2 h-4 w-4">
+          <path
+            d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+      </modal-open-button>
+    </div>
+  </div>
+</div>

@@ -2,10 +2,11 @@
 @plugin "daisyui";
 
 @plugin "daisyui/theme" {
-  name: "light";
+  name: dark;
   default: false;
   prefersdark: false;
-  color-scheme: "dark";
+  color-scheme: dark;
+
   --color-base-100: oklch(12% 0.042 264.695);
   --color-base-200: oklch(20% 0.042 265.755);
   --color-base-300: oklch(27% 0.041 260.031);
@@ -26,12 +27,20 @@
   --color-warning-content: oklch(98% 0.022 95.277);
   --color-error: oklch(58% 0.253 17.585);
   --color-error-content: oklch(96% 0.015 12.422);
+
+  /* border radius */
   --radius-selector: 2rem;
   --radius-field: 0.5rem;
   --radius-box: 1rem;
+
+  /* base sizes */
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
+
+  /* border size */
   --border: 1.5px;
+
+  /* effects */
   --depth: 0;
   --noise: 1;
 }

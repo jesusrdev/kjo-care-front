@@ -5,9 +5,10 @@ import { KeycloakService } from '../../modules/auth/services/keycloak.service';
 export const authGuard: CanActivateFn = () => {
   const keycloakService = inject(KeycloakService);
   const router = inject(Router);
-  if (keycloakService.keycloak.isTokenExpired()) {
+
+  if (!keycloakService.isLoading() && keycloakService.keycloak.isTokenExpired()) {
     router.navigate(['login']);
-    // Evita que la pagina entre en un ciclo infinito de recarga
+    // Evita que la página entre en un ciclo infinito de recarga
     return false;
   }
   return true;

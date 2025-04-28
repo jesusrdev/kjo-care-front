@@ -1,0 +1,22 @@
+<div class="p-4">
+  <h2 class="text-2xl font-bold mb-4">Configuraciones</h2>
+
+  <div class="flex mb-4 tabs tabs-boxed bg-base-100 p-1 rounded-lg">
+    @for (tab of settingsTabs(); track tab.path) {
+      <a
+        [routerLink]="tab.path"
+        routerLinkActive="tab-active bg-primary text-primary-content"
+        [routerLinkActiveOptions]="{ exact: tab.exact ?? false }"
+        class="tab transition-all duration-200 hover:bg-base-300"
+      >
+        {{ tab.name }}
+      </a>
+    }
+  </div>
+
+  <div
+    class="bg-base-100 border border-base-300 rounded-lg p-6 shadow-sm transition-all"
+  >
+    <router-outlet />
+  </div>
+</div>

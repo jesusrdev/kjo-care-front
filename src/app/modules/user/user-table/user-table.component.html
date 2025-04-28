@@ -1,0 +1,54 @@
+<div class="overflow-x-auto">
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th>Status</th>
+      <th>Created At</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (user of users(); track $index) {
+        <tr class="hover:bg-base-200">
+          <td>{{ user.firstName }} {{ user.lastName }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ 'ROLE' }}</td>
+          <td>
+            @if (user.enabled) {
+              <span class="badge badge-primary">Active</span>
+            } @else {
+              <span class="badge badge-neutral">Inactive</span>
+            }
+          </td>
+          <td>{{ user.createdTimestamp | date }}</td>
+          <td class="flex items-center gap-1">
+            <modal-open-button
+              [modalName]="'modal_user_edit'"
+              [type]="'icon'"
+              (click)="userService.selectedUser = user"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   class="lucide lucide-square-pen h-4 w-4">
+                <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path
+                  d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"></path>
+              </svg>
+            </modal-open-button>
+
+            <button class="btn btn-circle btn-xs">X</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="7" class="text-center">
+            <p class="">No users found.</p>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
