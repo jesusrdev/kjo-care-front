@@ -1,23 +1,27 @@
 <div class="card bg-base-100 shadow-sm border-[0.5px] border-base-300 h-full">
-  <div class="card-body">
-    <div class="flex items-center justify-between">
-      <h2 class="card-title line-clamp-2">{{ blog().title }}</h2>
-      <blog-card-options-button [blog]="blog()" />
-    </div>
-    <div class="flex items-center gap-2 text-xs opacity-80">
-      <span>By {{ blog().user?.firstName }} {{ blog().user?.lastName }}</span>
-      <span>•</span>
-      <span>
+  <div class="card-body justify-between">
+    <div class="flex flex-col">
+      <div class="flex items-center justify-between">
+        <h2 class="card-title line-clamp-2">{{ blog().title }}</h2>
+        <blog-card-options-button [blog]="blog()" />
+      </div>
+      <div class="flex items-center gap-2 text-xs opacity-80">
+        <span>By {{ blog().author?.firstName }} {{ blog().author?.lastName }}</span>
+        <span>•</span>
+        <span>
         <!-- CALENDAR ICON HERE -->
-        {{ blog().publishedDate }}
+          {{ blog().publishedDate }}
       </span>
+      </div>
+      <p class="text-sm line-clamp-3 my-3 opacity-80">{{ blog().content }}</p>
     </div>
-    <p class="text-sm line-clamp-3 my-3 opacity-80">{{ blog().content }}</p>
     <div class="card-actions justify-between items-center">
-      @if (blog().status == Status.Published) {
-        <div class="badge badge-primary">{{ blog().status }}</div>
-      } @else {
-        <div class="badge badge-outline">{{ blog().status }}</div>
+      @if (blog().state == Status.Published) {
+        <div class="badge badge-primary">Published</div>
+      } @else if (blog().state == Status.Draft) {
+        <div class="badge badge-outline">Draft</div>
+      } @else if (blog().state == Status.Deleted) {
+        <div class="badge badge-error">Deleted</div>
       }
       <modal-open-button
         [modalName]="'modal_blog_detail'"

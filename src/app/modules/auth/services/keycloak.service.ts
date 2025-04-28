@@ -15,6 +15,9 @@ export class KeycloakService {
   readonly profile = computed(() => this._userProfile());
   readonly isAuthenticated = computed(() => this._isAuthenticated());
 
+  private _isLoading = signal<boolean>(true);
+  readonly isLoading = computed(() => this._isLoading());
+
   private initKeycloak(): Keycloak {
     if (!this._keycloakInstance()) {
       const keycloak = new Keycloak({
@@ -40,6 +43,8 @@ export class KeycloakService {
         onLoad: 'login-required',
       });
 
+      this._isLoading.set(false)
+
       this._isAuthenticated.set(authenticated);
 
       if (authenticated) {
@@ -54,6 +59,7 @@ export class KeycloakService {
     } catch (error) {
       console.error('Error al inicializar Keycloak:', error);
       this._isAuthenticated.set(false);
+      this._isLoading.set(false)
     }
   }
 
