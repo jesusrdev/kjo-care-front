@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { Blog, Category, FilterDTO, Status } from '../../core/models/blog';
 import { BlogModalComponent } from './blog-modal/blog-modal.component';
 import { BlogGridComponent } from './blog-grid/blog-grid.component';
@@ -7,6 +7,10 @@ import { BlogFilterComponent } from './blog-filter/blog-filter.component';
 import { BlogDetailComponent } from './blog-detail/blog-detail.component';
 import { ModalOpenButtonComponent } from '../../shared/components/modal-open-button/modal-open-button.component';
 import { BlogService } from '../../core/services/blog.service';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { CategoryService } from '../../core/services/category.service';
+import { ToastService } from '../../core/services/toast.service';
+import { blogs } from '../../shared/utils/local-data';
 
 @Component({
   selector: 'app-blog',
@@ -23,151 +27,73 @@ import { BlogService } from '../../core/services/blog.service';
 export class BlogPageComponent {
 
   blogService = inject(BlogService);
+  categoryService = inject(CategoryService);
+  toastService = inject(ToastService);
 
-  blogs = signal<Blog[]>([
-    {
-      id: 1,
-      userId: 1,
-      categoryId: 1,
-      title: 'Blog 1 lalalalalalalalal alalalalalaalalaasdas dasdasdasdasdasdasda dasdasdadas',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus.',
-      image: 'https://picsum.photos/id/10/200/300',
-      video: 'https://videos.pexels.com/video-files/8057698/8057698-uhd_3840_2160_25fps.mp4',
-      publishedDate: '2023-01-01',
-      modificationDate: '2023-01-01',
-      status: Status.Published,
-      user: {
-        firstName: 'John Doe',
-        lastName: 'Doe',
-        username: 'johndoe',
-        email: 'johndoe@example.com'
-      },
-      category: {
-        id: 1,
-        name: 'Mental Health'
-      }
-    },
-    {
-      id: 2,
-      userId: 1,
-      categoryId: 2,
-      title: 'Blog 2',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus.',
-      image: 'https://picsum.photos/id/10/200/300',
-      publishedDate: '2023-01-01',
-      modificationDate: '2023-01-01',
-      status: Status.Published,
-      user: {
-        firstName: 'John Doe',
-        lastName: 'Doe',
-        username: 'johndoe',
-        email: 'johndoe@example.com'
-      },
-      category: {
-        id: 2,
-        name: 'Nutrition'
-      }
-    },
-    {
-      id: 3,
-      userId: 1,
-      categoryId: 1,
-      title: 'Blog 3',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus.',
-      image: 'https://picsum.photos/id/10/200/300',
-      publishedDate: '2023-01-01',
-      modificationDate: '2023-01-01',
-      status: Status.Draft,
-      user: {
-        firstName: 'John Doe',
-        lastName: 'Doe',
-        username: 'johndoe',
-        email: 'johndoe@example.com'
-      },
-      category: {
-        id: 1,
-        name: 'Mental Health'
-      }
-    },
-    {
-      id: 4,
-      userId: 2,
-      categoryId: 3,
-      title: 'Blog 4',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus.',
-      image: 'https://picsum.photos/id/10/200/300',
-      publishedDate: '2023-01-01',
-      modificationDate: '2023-01-01',
-      status: Status.Draft,
-      user: {
-        firstName: 'John Doe',
-        lastName: 'Doe',
-        username: 'johndoe',
-        email: 'johndoe@example.com'
-      },
-      category: {
-        id: 3,
-        name: 'Fitness'
-      }
-    },
-    {
-      id: 5,
-      userId: 1,
-      categoryId: 3,
-      title: 'Blog 5',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus.',
-      image: 'https://picsum.photos/id/10/200/300',
-      publishedDate: '2023-01-01',
-      modificationDate: '2023-01-01',
-      status: Status.Published,
-      user: {
-        firstName: 'John Doe',
-        lastName: 'Doe',
-        username: 'johndoe',
-        email: 'johndoe@example.com'
-      },
-      category: {
-        id: 3,
-        name: 'Fitness'
-      }
-    }
-  ]);
-  filteredBlogs = signal<Blog[]>([]);
+  blogs = rxResource({
+    loader: () => this.blogService.findAll()
+  });
+  _categories = rxResource({
+    loader: () => this.categoryService.findAll()
+  });
 
-  categories = signal<Category[]>([
-    {
-      id: 1,
-      name: 'Mental Health'
-    },
-    {
-      id: 2,
-      name: 'Nutrition'
-    },
-    {
-      id: 3,
-      name: 'Fitness'
-    }
-  ]);
+  categories = computed<Category[]>(() => {
+    return this._categories.value() ?? [];
+  });
 
-  ngOnInit(): void {
-    this.filteredBlogs.set(this.blogs());
-  }
-
-  filterBlogs(filter: FilterDTO) {
-    let temporal = this.blogs();
+  filteredBlogs = computed<Blog[]>(() => {
+    let temporal = this.blogs.value() ?? [];
+    const filter = this.filter();
 
     if (filter.search.length > 0) {
       temporal = temporal.filter(blog => blog.title.toLowerCase().includes(filter.search.toLowerCase()));
     }
 
     if (filter.category > 0) {
-      temporal = temporal.filter(blog => blog.categoryId === filter.category);
+      temporal = temporal.filter(blog => blog.category?.id === filter.category);
     }
 
     if (filter.status.length > 0) {
-      temporal = temporal.filter(blog => blog.status === filter.status);
+      temporal = temporal.filter(blog => blog.state === filter.status);
     }
 
-    this.filteredBlogs.set(temporal);
+    return temporal;
+  });
+
+  private filter = signal<FilterDTO>({
+    search: '',
+    category: 0,
+    status: Status.Published
+  });
+
+  setFilter(filter: FilterDTO) {
+    this.filter.set(filter);
+  }
+
+  reload() {
+    this.blogs.reload();
+  }
+
+  constructor() {
+    effect(() => {
+      switch (this.blogs.status()) {
+        case 1:
+          this.toastService.addToast({
+            message: 'No se pudieron cargar los blogs',
+            type: 'error',
+            duration: 3000
+          });
+
+          this.blogs.set(blogs);
+          break;
+        case 5:
+          this.toastService.addToast({
+            message: 'Se usaran blogs de ejemplo',
+            type: 'info',
+            duration: 3000
+          });
+          break;
+      }
+    });
   }
 }

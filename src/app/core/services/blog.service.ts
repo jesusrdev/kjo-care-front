@@ -1,33 +1,58 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+import { map, Observable } from 'rxjs';
+
 import { environment } from '../../../environments/environment';
+
 import { Blog } from '../models/blog';
+import { blogs } from '../../shared/utils/local-data';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BlogService {
-  private baseUrl: string = environment.apiUrl;
+  private baseUrl: string = environment.apiUrl + '/blog/blogs';
 
-  private _selectedBlog = signal<Blog | undefined>(undefined);
+  private http = inject(HttpClient);
 
-  get selectedBlog(): Blog | undefined {
+  private _selectedBlog = signal<Blog>(blogs[0]);
+
+  get selectedBlog(): Blog{
     return this._selectedBlog();
   }
 
-  set selectedBlog(blog: Blog | undefined) {
-    console.log('Blog seleccionado: ', blog);
+  set selectedBlog(blog: Blog) {
     this._selectedBlog.set(blog);
   }
 
-  getBlogs() {
+  findAll(): Observable<Blog[]> {
+    return this.http.get<Blog[]>(`${this.baseUrl}/all`);
   }
 
-  createBlog() {
+  // findAll(): Observable<Blog[]> {
+  //   return this.http.get<{
+  //     content: Blog[];
+  //     page: number;
+  //     size: number;
+  //   }>(`${this.baseUrl}/all`).pipe(
+  //     map(({ content }) => content)
+  //   );
+  // }
+
+  getById(id: number): Observable<Blog> {
+    return this.http.get<Blog>(`${this.baseUrl}/${id}`);
   }
 
-  updateBlog() {
+  create(request: FormData): Observable<Blog> {
+    return this.http.post<Blog>(`${this.baseUrl}`, request);
   }
 
-  deleteBlog() {
+  update(request: FormData, id: number): Observable<Blog> {
+    return this.http.put<Blog>(`${this.baseUrl}/${id}`, request);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 }
