@@ -3,7 +3,7 @@
     <div class="flex flex-col">
       <div class="flex items-center justify-between">
         <h2 class="card-title line-clamp-2">{{ blog().blog.title }}</h2>
-        <blog-card-options-button [blog]="blog().blog" />
+        <blog-card-options-button [blog]="blog()" />
       </div>
       <div class="flex items-center gap-2 text-xs opacity-80">
         <span class="truncate">By {{ blog().blog.author?.firstName }} {{ blog().blog.author?.lastName }}</span>
