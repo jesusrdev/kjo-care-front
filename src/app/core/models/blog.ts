@@ -11,10 +11,6 @@ export interface Blog {
   state: Status;
   author?: UserProfile;
   category?: Category;
-  reactionCount?: number;
-  commentCount?: number;
-  comments?: Comment[];
-  accesible?: boolean;
 }
 
 export enum Status {
