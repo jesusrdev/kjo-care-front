@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { Blog, Category, FilterDTO, Status } from '../../core/models/blog';
+import { Category, FilterDTO, Status } from '../../core/models/blog';
 import { BlogModalComponent } from './blog-modal/blog-modal.component';
 import { BlogGridComponent } from './blog-grid/blog-grid.component';
 import { BlogTableComponent } from './blog-table/blog-table.component';
@@ -11,6 +11,7 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { CategoryService } from '../../core/services/category.service';
 import { ToastService } from '../../core/services/toast.service';
 import { blogs } from '../../shared/utils/local-data';
+import { BlogResponse } from '../../core/interfaces/blog-http.interface';
 
 @Component({
   selector: 'app-blog',
@@ -41,20 +42,20 @@ export default class BlogPageComponent {
     return this._categories.value() ?? [];
   });
 
-  filteredBlogs = computed<Blog[]>(() => {
+  filteredBlogs = computed<BlogResponse[]>(() => {
     let temporal = this.blogs.value() ?? [];
     const filter = this.filter();
 
     if (filter.search.length > 0) {
-      temporal = temporal.filter(blog => blog.title.toLowerCase().includes(filter.search.toLowerCase()));
+      temporal = temporal.filter(blog => blog.blog.title.toLowerCase().includes(filter.search.toLowerCase()));
     }
 
     if (filter.category > 0) {
-      temporal = temporal.filter(blog => blog.category?.id === filter.category);
+      temporal = temporal.filter(blog => blog.blog.category?.id === filter.category);
     }
 
     if (filter.status.length > 0) {
-      temporal = temporal.filter(blog => blog.state === filter.status);
+      temporal = temporal.filter(blog => blog.blog.state === filter.status);
     }
 
     return temporal;

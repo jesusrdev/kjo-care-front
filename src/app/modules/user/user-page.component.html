@@ -1,0 +1,41 @@
+<div class="flex justify-between items-center gap-2 flex-wrap">
+  <h1 class="sm:text-3xl text-2xl font-bold">User Management</h1>
+  <modal-open-button
+    modalName="modal_user_create"
+    [classes]="'btn-primary'"
+  >
+    Add User
+  </modal-open-button>
+</div>
+
+<div class="my-6 card shadow-sm border-[1px] border-neutral-content/20 p-6">
+  <div class="">
+    <h2 class="sm:text-2xl text-xl font-semibold">Users</h2>
+    <p class="text-sm opacity-90">Manage your application users, their roles and permissions.</p>
+    <input
+      type="search"
+      class="input w-full lg:w-1/2 mt-2"
+      [value]="search()"
+      placeholder="Search users..."
+      (input)="search.set(searchInput.value)"
+      #searchInput
+    />
+  </div>
+
+  @if (users.isLoading()) {
+    <div class="flex justify-center p-4">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+  }
+  <user-table [users]="filteredUsers()"></user-table>
+</div>
+
+
+<!-- MODALS -->
+<user-modal type="create" (reload)="reload()"></user-modal>
+
+<user-modal
+  [type]="'edit'"
+  [user]="this.userService.selectedUser"
+  (reload)="reload()"
+></user-modal>

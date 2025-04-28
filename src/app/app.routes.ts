@@ -6,23 +6,27 @@ export const routes: Routes = [
   {
     path: '',
     redirectTo: 'home',
-    pathMatch: 'full',
+    pathMatch: 'full'
   },
   {
     path: 'home',
     component: HomeComponent,
-    //canActivate: [authGuard]
+    canActivate: [authGuard]
   },
   {
     path: 'dashboard',
     loadComponent: () =>
       import('./shared/components/layout/dashboard/dashboard.component'),
     children: [
-      { path: '', loadComponent: () => import('./modules/dashboard/dashboard-page.component'), },
+      { path: '', loadComponent: () => import('./modules/dashboard/dashboard-page.component') },
+      {
+        path: 'users',
+        loadComponent: () => import('./modules/user/user-page.component')
+      },
       { path: 'blog-management', loadComponent: () => import('./modules/blog/blog-page.component') },
-      { path: "settings", loadChildren: () => import("./modules/settings/settings.routes") }
+      { path: 'settings', loadChildren: () => import('./modules/settings/settings.routes') }
     ],
-    //canActivate: [authGuard]
-  },
+    canActivate: [authGuard]
+  }
 
 ];

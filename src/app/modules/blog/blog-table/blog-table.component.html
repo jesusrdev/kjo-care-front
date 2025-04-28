@@ -14,19 +14,19 @@
     <tbody>
       @for (blog of blogs(); track $index) {
         <tr class="hover:bg-base-200">
-          <td>{{ blog.id }}</td>
+          <td>{{ blog.blog.id }}</td>
           <td class="min-w-64">
             <p class="line-clamp-2 text-ellipsis text-wrap">
-              {{ blog.title }}
+              {{ blog.blog.title }}
             </p>
           </td>
           <td class="truncate">
-            {{ blog.author?.firstName }} {{ blog.author?.lastName }}
+            {{ blog.blog.author?.firstName }} {{ blog.blog.author?.lastName }}
           </td>
-          <td class="truncate">{{ blog.category?.name }}</td>
-          <td>{{ blog.publishedDate }}</td>
+          <td class="truncate">{{ blog.blog.category?.name }}</td>
+          <td>{{ blog.blog.publishedDate }}</td>
           <td>
-            @if (blog.state == Status.Draft) {
+            @if (blog.blog.state == Status.Draft) {
               <span class="badge badge-outline">Draft</span>
             } @else {
               <span class="badge badge-primary">Published</span>

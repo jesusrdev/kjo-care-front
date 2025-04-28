@@ -60,6 +60,6 @@
 <blog-modal
   [type]="'edit'"
   [categories]="categories()"
-  [blog]="blogService.selectedBlog"
+  [blog]="blogService.selectedBlog.blog"
   (reload)="reload()"
 ></blog-modal>

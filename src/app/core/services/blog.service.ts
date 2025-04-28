@@ -1,12 +1,13 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 
 import { Blog } from '../models/blog';
 import { blogs } from '../../shared/utils/local-data';
+import { BlogResponse } from '../interfaces/blog-http.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -16,18 +17,18 @@ export class BlogService {
 
   private http = inject(HttpClient);
 
-  private _selectedBlog = signal<Blog>(blogs[0]);
+  private _selectedBlog = signal<BlogResponse>(blogs[0]);
 
-  get selectedBlog(): Blog{
+  get selectedBlog(): BlogResponse {
     return this._selectedBlog();
   }
 
-  set selectedBlog(blog: Blog) {
+  set selectedBlog(blog: BlogResponse) {
     this._selectedBlog.set(blog);
   }
 
-  findAll(): Observable<Blog[]> {
-    return this.http.get<Blog[]>(`${this.baseUrl}/all`);
+  findAll(): Observable<BlogResponse[]> {
+    return this.http.get<BlogResponse[]>(`${this.baseUrl}/all`);
   }
 
   // findAll(): Observable<Blog[]> {

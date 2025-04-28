@@ -1,0 +1,117 @@
+<dialog id="{{ nameModal() }}" class="modal">
+  <div class="modal-box max-h-11/12">
+    <!-- X BUTTON -->
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+
+    <h2 class="text-lg font-semibold">{{ title() }}</h2>
+
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">First Name</legend>
+        <input
+          type="text"
+          class="input validator w-full"
+          formControlName="firstName"
+          placeholder="First Name"
+          minlength="3"
+          required
+          autocomplete="off"
+        />
+        <p class="validator-hint hidden">
+          {{ formUtils.getFieldError(userForm, 'firstName') }}
+        </p>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Last Name</legend>
+        <input
+          type="text"
+          class="input validator w-full"
+          formControlName="lastName"
+          placeholder="Last Name"
+          minlength="3"
+          required
+          autocomplete="off"
+        />
+        <p class="validator-hint hidden">
+          {{ formUtils.getFieldError(userForm, 'lastName') }}
+        </p>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Email</legend>
+        <input
+          type="email"
+          class="input validator w-full"
+          formControlName="email"
+          placeholder="Email"
+          minlength="3"
+          required
+          autocomplete="off"
+          pattern="{{ formUtils.emailPattern }}"
+        />
+        <p class="validator-hint hidden">
+          {{ formUtils.getFieldError(userForm, 'email') }}
+        </p>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Password</legend>
+        <input
+          type="text"
+          class="input validator w-full"
+          formControlName="password"
+          placeholder="Password"
+          minlength="3"
+          required
+          autocomplete="off"
+        />
+        <p class="validator-hint hidden">
+          {{ formUtils.getFieldError(userForm, 'password') }}
+        </p>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Roles</legend>
+        <select
+          class="select validator w-full"
+          formControlName="roles"
+          required
+          [ngClass]="{ '!input-error': formUtils.isValidField(userForm, 'roles') }"
+        >
+          <option disabled [ngValue]="''">-- Select role --</option>
+
+          <option value="admin">Admin</option>
+          <option value="user">User</option>
+        </select>
+        <p class="validator-hint hidden">
+          {{ formUtils.getFieldError(userForm, 'roles') }}
+        </p>
+      </fieldset>
+
+
+      <div class="modal-action mt-4">
+        <form method="dialog">
+          <button class="btn">Close</button>
+
+          <button
+            class="btn btn-primary"
+            [disabled]="userForm.invalid"
+            type="submit"
+            (click)="onSubmit()"
+          >
+            {{ nameButton() }}
+          </button>
+        </form>
+
+      </div>
+    </form>
+
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
+

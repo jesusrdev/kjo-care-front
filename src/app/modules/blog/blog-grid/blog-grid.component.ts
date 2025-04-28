@@ -1,6 +1,7 @@
 import { Component, input } from '@angular/core';
-import { Blog, Status } from '../../../core/models/blog';
+import { Status } from '../../../core/models/blog';
 import { BlogCardComponent } from './blog-card/blog-card.component';
+import { BlogResponse } from '../../../core/interfaces/blog-http.interface';
 
 @Component({
   selector: 'blog-grid',
@@ -11,7 +12,7 @@ import { BlogCardComponent } from './blog-card/blog-card.component';
 })
 export class BlogGridComponent {
 
-  blogs = input.required<Blog[]>();
+  blogs = input.required<BlogResponse[]>();
 
   protected readonly Status = Status;
 }

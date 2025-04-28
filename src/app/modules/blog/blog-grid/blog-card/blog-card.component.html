@@ -2,25 +2,25 @@
   <div class="card-body justify-between">
     <div class="flex flex-col">
       <div class="flex items-center justify-between">
-        <h2 class="card-title line-clamp-2">{{ blog().title }}</h2>
+        <h2 class="card-title line-clamp-2">{{ blog().blog.title }}</h2>
         <blog-card-options-button [blog]="blog()" />
       </div>
       <div class="flex items-center gap-2 text-xs opacity-80">
-        <span>By {{ blog().author?.firstName }} {{ blog().author?.lastName }}</span>
+        <span class="truncate">By {{ blog().blog.author?.firstName }} {{ blog().blog.author?.lastName }}</span>
         <span>•</span>
         <span>
         <!-- CALENDAR ICON HERE -->
-          {{ blog().publishedDate }}
+          {{ blog().blog.publishedDate }}
       </span>
       </div>
-      <p class="text-sm line-clamp-3 my-3 opacity-80">{{ blog().content }}</p>
+      <p class="text-sm line-clamp-3 my-3 opacity-80">{{ blog().blog.content }}</p>
     </div>
     <div class="card-actions justify-between items-center">
-      @if (blog().state == Status.Published) {
+      @if (blog().blog.state == Status.Published) {
         <div class="badge badge-primary">Published</div>
-      } @else if (blog().state == Status.Draft) {
+      } @else if (blog().blog.state == Status.Draft) {
         <div class="badge badge-outline">Draft</div>
-      } @else if (blog().state == Status.Deleted) {
+      } @else if (blog().blog.state == Status.Deleted) {
         <div class="badge badge-error">Deleted</div>
       }
       <modal-open-button

@@ -10,7 +10,7 @@ import type { MoodStateRequest, MoodStateResponse } from '../interfaces/mood-htt
 })
 export class MoodStateService {
   private http = inject(HttpClient);
-  private readonly baseUrl = `${environment.apiUrl}/api/mind`;
+  private readonly baseUrl = `${environment.apiUrl}`;
 
   private moodStates = signal<Content[]>([]);
   private isLoading = signal<boolean>(false);
