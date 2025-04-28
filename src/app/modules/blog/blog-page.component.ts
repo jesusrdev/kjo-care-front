@@ -54,7 +54,7 @@ export class BlogPageComponent {
     }
 
     if (filter.status.length > 0) {
-      temporal = temporal.filter(blog => blog.status === filter.status);
+      temporal = temporal.filter(blog => blog.state === filter.status);
     }
 
     return temporal;

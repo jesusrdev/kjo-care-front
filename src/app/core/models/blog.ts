@@ -8,17 +8,19 @@ export interface Blog {
   video?: string;
   publishedDate: string;
   modifiedDate: string;
-  status: Status;
+  state: Status;
   author?: UserProfile;
   category?: Category;
   reactionCount?: number;
   commentCount?: number;
+  comments?: Comment[];
+  accesible?: boolean;
 }
 
 export enum Status {
-  Draft = 'Draft',
-  Published = 'Published',
-  Deleted = 'Deleted',
+  Published = 'PUBLICADO',
+  Draft = 'PENDIENTE',
+  Deleted = 'ELIMINADO',
 }
 
 export interface Category {

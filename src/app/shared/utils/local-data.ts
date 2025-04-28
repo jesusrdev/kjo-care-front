@@ -8,7 +8,7 @@ export const blogs: Blog[] = [
     image: 'https://picsum.photos/id/10/200/300',
     publishedDate: '2023-01-01',
     modifiedDate: '2023-01-01',
-    status: Status.Draft,
+    state: Status.Draft,
     author: {
       firstName: 'John Doe',
       lastName: 'Doe',
@@ -27,7 +27,7 @@ export const blogs: Blog[] = [
     image: 'https://picsum.photos/id/10/200/300',
     publishedDate: '2023-01-01',
     modifiedDate: '2023-01-01',
-    status: Status.Published,
+    state: Status.Published,
     author: {
       firstName: 'John Doe',
       lastName: 'Doe',
@@ -46,7 +46,7 @@ export const blogs: Blog[] = [
     image: 'https://picsum.photos/id/10/200/300',
     publishedDate: '2023-01-01',
     modifiedDate: '2023-01-01',
-    status: Status.Draft,
+    state: Status.Draft,
     author: {
       firstName: 'John Doe',
       lastName: 'Doe',
@@ -65,7 +65,7 @@ export const blogs: Blog[] = [
     image: 'https://picsum.photos/id/10/200/300',
     publishedDate: '2023-01-01',
     modifiedDate: '2023-01-01',
-    status: Status.Draft,
+    state: Status.Draft,
     author: {
       firstName: 'John Doe',
       lastName: 'Doe',
@@ -84,7 +84,7 @@ export const blogs: Blog[] = [
     image: 'https://picsum.photos/id/10/200/300',
     publishedDate: '2023-01-01',
     modifiedDate: '2023-01-01',
-    status: Status.Published,
+    state: Status.Published,
     author: {
       firstName: 'John Doe',
       lastName: 'Doe',
