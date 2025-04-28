@@ -24,7 +24,7 @@ import { blogs } from '../../shared/utils/local-data';
   ],
   templateUrl: './blog-page.component.html'
 })
-export class BlogPageComponent {
+export default class BlogPageComponent {
 
   blogService = inject(BlogService);
   categoryService = inject(CategoryService);

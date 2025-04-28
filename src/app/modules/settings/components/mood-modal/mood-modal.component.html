@@ -1,0 +1,128 @@
+<dialog [id]="modalId()" class="modal modal-bottom sm:modal-middle">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">
+      {{ isNewMood() ? "Add New" : "Edit" }} Estados de Animos
+    </h3>
+
+    @if (moodForm) {
+      <form [formGroup]="moodForm" class="py-4">
+        <div class="form-control flex flex-col">
+          <label class="label">
+            <span class="label-text">Nombre</span>
+            @if (nameControl?.invalid && nameControl?.touched) {
+              <span class="label-text-alt text-error"
+                >El nombre es requerido</span
+              >
+            }
+          </label>
+          <input
+            type="text"
+            class="input input-bordered"
+            formControlName="name"
+            placeholder="Happy"
+            [class.input-error]="nameControl?.invalid && nameControl?.touched"
+          />
+        </div>
+
+        <div class="form-control mt-4 flex flex-col">
+          <label class="label">
+            <span class="label-text">Descripcion</span>
+          </label>
+          <textarea
+            class="textarea textarea-bordered"
+            formControlName="description"
+            placeholder="Añade una descripcion"
+            rows="2"
+          ></textarea>
+        </div>
+
+        <div class="form-control mt-4">
+          <label class="label">
+            <span class="label-text">Color</span>
+            @if (colorControl?.invalid && colorControl?.touched) {
+              <span class="label-text-alt text-error"
+                >El color es requerido</span
+              >
+            }
+          </label>
+
+          <div class="flex flex-col items-center gap-4">
+            <div class="color-picker">
+              <div class="color-wheel">
+                <div
+                  class="colorwheel-container flex items-center justify-center relative"
+                >
+                  <div class="relative">
+                    <div
+                      class="w-16 h-16 rounded-full overflow-hidden border-4 border-base-200 shadow-lg"
+                      [style.background-color]="moodForm.get('color')?.value"
+                    >
+                      <input
+                        type="color"
+                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        formControlName="color"
+                      />
+                    </div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      class="w-5 h-5 absolute -bottom-1 -right-1 text-primary bg-white rounded-full p-0.5 shadow-sm border border-base-300"
+                    >
+                      <path
+                        d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z"
+                      />
+                      <path
+                        d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="color-presets flex flex-wrap gap-2 mt-3 justify-center"
+              >
+                @for (color of colorPresets; track color) {
+                  <button
+                    type="button"
+                    class="w-8 h-8 rounded-full transition-transform hover:scale-125 border-2 border-base-200 focus:ring-2 focus:ring-primary focus:outline-none shadow-sm hover:shadow"
+                    [style.background-color]="color"
+                    (click)="setMoodColor(color)"
+                  ></button>
+                }
+              </div>
+
+              <div class="mt-4 flex items-center justify-center gap-3">
+                <div
+                  class="w-8 h-8 rounded-full border border-base-300"
+                  [style.background-color]="moodForm.get('color')?.value"
+                ></div>
+                <span
+                  class="text-sm font-mono bg-base-100 px-2 py-0.5 rounded border border-base-200"
+                  >{{ moodForm.get("color")?.value }}</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="modal-action">
+        <form method="dialog">
+          <button type="button" class="btn" (click)="cancelEdit()">
+            Cancel
+          </button>
+        </form>
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="moodForm.invalid"
+          (click)="saveMood()"
+        >
+          {{ isNewMood() ? "Añadir" : "Guardar" }}
+        </button>
+      </div>
+    }
+  </div>
+</dialog>

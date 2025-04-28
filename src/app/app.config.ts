@@ -2,7 +2,7 @@ import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withViewTransitions } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { httpTokenInterceptor } from './core/interceptors/http-token.interceptor';
 
 export const appConfig: ApplicationConfig = {
@@ -17,7 +17,7 @@ export const appConfig: ApplicationConfig = {
       })
     ),
     provideHttpClient(
-      withInterceptors([httpTokenInterceptor])
+      withInterceptors([httpTokenInterceptor]), withFetch()
     )
   ]
 };
