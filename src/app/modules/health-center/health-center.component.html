@@ -1,0 +1,47 @@
+<div class="space-y-8 p-4">
+  <!-- Encabezado -->
+  <div class="flex justify-between items-center">
+    <h1 class="text-2xl font-bold">Centros de Salud</h1>
+    <div class="badge badge-primary p-3">Encuentra centros médicos cercanos</div>
+  </div>
+
+  <!-- Sección del mapa -->
+  <section class="bg-base-200 rounded-lg overflow-hidden border border-base-300">
+    <h2 class="text-xl font-semibold p-4 bg-base-300">Mapa de búsqueda</h2>
+    <div class="p-4">
+      <map-center (newSearch)="onNewSearch($event)"></map-center>
+    </div>
+    <div class="px-4 pb-4 text-sm text-gray-500">
+      Usa el buscador en la esquina superior derecha del mapa para encontrar ubicaciones
+    </div>
+  </section>
+
+  <!-- Sección de historial -->
+  <section class="bg-base-200 rounded-lg border border-base-300">
+    <div class="flex justify-between items-center p-4 bg-base-300">
+      <h2 class="text-xl font-semibold">Historial de búsquedas</h2>
+      @if (history().length > 0) {
+        <button class="btn btn-sm btn-ghost" (click)="clearHistory()">
+          <i class="material-icons text-sm">delete</i>
+          Limpiar historial
+        </button>
+      }
+    </div>
+
+    <div class="p-4">
+      @if (history().length > 0) {
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          @for (entry of history(); track entry.date) {
+            <center-card [entry]="entry"></center-card>
+          }
+        </div>
+      } @else {
+        <div class="text-center py-12 text-gray-500">
+          <i class="material-icons text-4xl mb-2">history</i>
+          <p>No hay búsquedas recientes</p>
+          <p class="text-sm">Las ubicaciones que busques aparecerán aquí</p>
+        </div>
+      }
+    </div>
+  </section>
+</div>

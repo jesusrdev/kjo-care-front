@@ -1,0 +1,12 @@
+<div class="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300">
+  <div class="card-body">
+    <h3 class="card-title text-base">{{ entry.address }}</h3>
+    <p class="text-xs text-gray-500">
+      {{ entry.date | date:'medium' }}
+    </p>
+    <div class="mt-2 flex items-center gap-1 text-xs">
+      <span class="badge badge-sm">Lat: {{ entry.lat.toFixed(5) }}</span>
+      <span class="badge badge-sm">Lng: {{ entry.lng.toFixed(5) }}</span>
+    </div>
+  </div>
+</div>

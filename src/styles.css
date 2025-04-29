@@ -1,6 +1,11 @@
 @import "tailwindcss";
+/* En styles.css o el archivo de estilos principal */
+@import "leaflet/dist/leaflet.css";
 @plugin "daisyui";
-
+#map {
+  width: 100%;
+  height: 100%;
+}
 @plugin "daisyui/theme" {
   name: dark;
   default: false;

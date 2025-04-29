@@ -21,7 +21,8 @@ export const routes: Routes = [
       { path: '', loadComponent: () => import('./modules/dashboard/dashboard-page.component'), },
       { path: 'blog-management', loadComponent: () => import('./modules/blog/blog-page.component') },
       { path: 'moods', loadChildren: () => import('./modules/mood-analytics/mood-analytics.routes') },
-      { path: "settings", loadChildren: () => import("./modules/settings/settings.routes") }
+      { path: "settings", loadChildren: () => import("./modules/settings/settings.routes") },
+      { path: "health-centers", loadComponent: () => import("./modules/health-center/health-center.component") }
     ],
     //canActivate: [authGuard]
   },
