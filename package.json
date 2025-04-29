@@ -23,6 +23,7 @@
     "daisyui": "^5.0.9",
     "keycloak-angular": "^19.0.2",
     "keycloak-js": "24.0.2",
+    "ngx-echarts": "^19.0.0",
     "postcss": "^8.5.3",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.0.15",

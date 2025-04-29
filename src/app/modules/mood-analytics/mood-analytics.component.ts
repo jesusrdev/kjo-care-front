@@ -4,12 +4,19 @@ import {
   effect,
   inject,
   signal,
+  OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MoodAnalyticsResponse } from '../../core/interfaces/mood-analytics.response';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { AnalyticsService } from '../../core/services/analytics.service';
+import {
+  Router,
+  RouterOutlet,
+  RouterLink,
+  RouterLinkActive,
+} from '@angular/router';
 
 interface Mood {
   label: string;
@@ -32,12 +39,20 @@ const STANDARD_MOODS = ['Happy', 'Neutral', 'Sad', 'Anxious', 'Energetic'];
 
 @Component({
   selector: 'mood-analytics',
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+  ],
   templateUrl: './mood-analytics.component.html',
+  styleUrl: './mood-analytics.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MoodAnalyticsComponent {
+export class MoodAnalyticsComponent implements OnInit {
   private moodAnalytics = inject(AnalyticsService);
+  private router = inject(Router);
 
   analyticsResource = rxResource({
     loader: () => this.moodAnalytics.getMoodAnalytics(this.getMonthsForRange()),
@@ -53,10 +68,13 @@ export class MoodAnalyticsComponent {
   ]);
   selectedRange = signal<string>('Last 3 Months');
 
-  tabs = signal<string[]>(['Mood Heatmap', 'Mood Distribution', 'Mood Trends']);
-  activeTab = signal<string>('Mood Heatmap');
+  tabs = signal<{ name: string; path: string; icon: string }[]>([
+    { name: 'Mood Heatmap', path: 'mood-heatmap', icon: 'grid_view' },
+    { name: 'Mood Distribution', path: 'mood-distribution', icon: 'pie_chart' },
+    { name: 'Mood Trends', path: 'mood-trends', icon: 'show_chart' },
+  ]);
 
-  daysArray = signal<number[]>(Array.from({ length: 35 }, (_, i) => i));
+  activeTab = signal<string>('Mood Heatmap');
 
   constructor() {
     effect(() => {
@@ -65,6 +83,18 @@ export class MoodAnalyticsComponent {
         this.processMoodData(data);
       }
     });
+  }
+
+  ngOnInit(): void {
+    const initialMoods: Mood[] = STANDARD_MOODS.map((label) => ({
+      label,
+      percent: 0,
+      entries: 0,
+      delta: 0,
+      color: MOOD_COLORS[label],
+    }));
+
+    this.moods.set(initialMoods);
   }
 
   private processMoodData(data: MoodAnalyticsResponse): void {
@@ -110,21 +140,32 @@ export class MoodAnalyticsComponent {
     }
   }
 
-  setActiveTab(tab: string): void {
-    this.activeTab.set(tab);
+  getMoodIcon(mood: string): string {
+    switch (mood) {
+      case 'Happy':
+        return 'sentiment_very_satisfied';
+      case 'Neutral':
+        return 'sentiment_neutral';
+      case 'Sad':
+        return 'sentiment_dissatisfied';
+      case 'Anxious':
+        return 'flutter_dash';
+      case 'Energetic':
+        return 'bolt';
+      default:
+        return 'mood';
+    }
+  }
+
+  setActiveTab(tabName: string): void {
+    this.activeTab.set(tabName);
+  }
+
+  navigateToTab(tabPath: string): void {
+    this.router.navigate(['/dashboard/moods', tabPath]);
   }
 
   export(): void {
-    console.log('Exportando datos de Mood Analytics...');
-    alert('Exportación de datos iniciada');
-  }
-
-  getDayColor(day: number): string {
-    if (day % 7 === 0) return 'transparent';
-    if (day % 5 === 0) return '#68D391';
-    if (day % 4 === 0) return '#9F7AEA';
-    if (day % 3 === 0) return '#FBD38D';
-    if (day % 2 === 0) return '#90CDF4';
-    return '#F6AD55';
+    console.log('Exporting Mood Analytics data...');
   }
 }
