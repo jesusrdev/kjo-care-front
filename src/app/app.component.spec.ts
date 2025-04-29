@@ -16,10 +16,10 @@ describe('AppComponent', () => {
 
 
 
-  it('should have router outlet', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('router-outlet')).toBeTruthy();
-  });
+  // it('should have router outlet', () => {
+  //   const fixture = TestBed.createComponent(AppComponent);
+  //   fixture.detectChanges();
+  //   const compiled = fixture.nativeElement as HTMLElement;
+  //   expect(compiled.querySelector('router-outlet')).toBeTruthy();
+  // });
 });

@@ -7,7 +7,7 @@
 
     <h2 class="text-lg font-semibold">{{ blog().title }}</h2>
     <div class="flex items-center gap-2 text-xs py-2">
-      <span>{{ blog().user?.firstName }} {{ blog().user?.lastName }}</span>
+      <span>{{ blog().author?.firstName }} {{ blog().author?.lastName }}</span>
       <span>•</span>
       <span class="flex items-center">
         <!-- CALENDAR ICON HERE -->
@@ -24,7 +24,7 @@
             <source src="{{ blog().video }}" type="video/mp4" />
           </video>
         } @else if (blog().image) {
-          <img src="{{ blog().image }}" alt="{{ blog().title }}" class="w-full h-full" />
+          <img src="{{ blog().image }}" alt="{{ blog().title }}" class="w-full h-full object-cover" />
         } @else {
           <div class="text-center opacity-80">
             <p class="text-sm">No image or video found.</p>
@@ -34,12 +34,24 @@
       <div class="space-y-4 text-sm opacity-80">
         {{ blog().content }}
       </div>
-      <div>
-        <h3 class="text-sm font-medium mb-2">Reactions</h3>
-        <div class="flex gap-4">
-          <div class="text-center">
-            <p class="text-lg font-bold">00</p>
-            <p class="text-xs text-muted-foreground">Likes</p>
+      <div class="flex gap-4">
+        <div>
+          <h3 class="text-sm font-medium mb-2">Reactions</h3>
+          <div class="flex gap-4">
+            <div class="text-center">
+              <p class="text-lg font-bold">{{ blog().reactionCount ?? '00' }}</p>
+              <p class="text-xs text-muted-foreground">Likes</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-sm font-medium mb-2">Comments</h3>
+          <div class="flex gap-4">
+            <div class="text-center">
+              <p class="text-lg font-bold">{{ blog().commentCount ?? '00' }}</p>
+              <p class="text-xs text-muted-foreground">Likes</p>
+            </div>
           </div>
         </div>
       </div>

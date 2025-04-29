@@ -11,14 +11,39 @@
 <div class="py-6">
   <blog-filter
     [categories]="categories()"
-    (onFilterChange)="filterBlogs($event)"
+    (onFilterChange)="setFilter($event)"
   ></blog-filter>
 </div>
 
 <div class="tabs tabs-box">
   <input type="radio" name="blogs" class="tab" aria-label="Grid View" checked="checked" />
   <div class="tab-content bg-base-100 border-base-300 p-6">
-    <blog-grid [blogs]="filteredBlogs()"></blog-grid>
+    @if (blogs.isLoading()) {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        @for (i of [1, 2, 3]; track $index) {
+          <div class="card bg-base-100 shadow-sm border-[0.5px] border-base-300 h-full">
+            <div class="card-body">
+              <div class="flex items-center justify-between">
+                <div class="skeleton h-5 w-1/2"></div>
+              </div>
+              <div class="skeleton h-2 w-full mb-2"></div>
+              <div class="skeleton h-3 w-full"></div>
+              <div class="skeleton h-3 w-full"></div>
+              <div class="skeleton h-3 w-full"></div>
+              <div class="skeleton h-3 w-2/3"></div>
+              <div class="card-actions justify-between items-center">
+                <div class="skeleton w-1/2 h-4 bg-primary mt-2"></div>
+                <div class="btn btn-neutral">
+                  <span class="loading loading-spinner"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <blog-grid [blogs]="filteredBlogs()"></blog-grid>
+    }
   </div>
 
   <input type="radio" name="blogs" class="tab" aria-label="Table view" />
@@ -28,12 +53,13 @@
 </div>
 
 <!--SECTION FOR MODALS-->
-<blog-detail [blog]="blogService.selectedBlog ?? blogs()[0]"></blog-detail>
+<blog-detail [blog]="blogService.selectedBlog"></blog-detail>
 
-<blog-modal [categories]="categories()"></blog-modal>
+<blog-modal [categories]="categories()" (reload)="reload()"></blog-modal>
 
 <blog-modal
-  [nameModal]="'modal_blog_edit'"
+  [type]="'edit'"
   [categories]="categories()"
   [blog]="blogService.selectedBlog"
+  (reload)="reload()"
 ></blog-modal>

@@ -1,6 +1,15 @@
-<p>Bienvenido</p>
-
-<button (click)="logout()"  class="btn btn-error">Logout</button>
-
-<button (click)="accout()" class="btn btn-info">Manager Acount</button>
-
+<main class="flex flex-col items-center justify-center h-screen w-screen">
+  <div class="card bg-neutral text-primary-content max-w-96 m-4">
+    <div class="card-body">
+      <h2 class="card-title text-2xl font-bold">KJO Mind Care</h2>
+      <p class="text-md">Welcome to the dashboard of the KJO Mind Care application.</p>
+      <div class="card-actions flex-col *:w-full mt-2">
+        <a class="btn btn-primary" routerLink="/dashboard">Go to Dashboard</a>
+        <div class="flex items-center gap-1.5 *:flex-1">
+          <button (click)="account()" class="btn btn-outline btn-info">Manager Acount</button>
+          <button (click)="logout()" class="btn btn-error btn-outline">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

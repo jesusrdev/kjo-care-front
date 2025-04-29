@@ -1,22 +1,25 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { KeycloakService } from '../../auth/services/keycloak.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [
+    RouterLink
+  ],
   templateUrl: './home.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent {
 
-  private keycloackService = inject(KeycloakService)
+ private keycloakService = inject(KeycloakService);
 
   async logout() {
-    await this.keycloackService.logout()
+    await this.keycloakService.logout();
   }
 
-  async accout() {
-    await this.keycloackService.goToAccountManagement()
+  async account() {
+    await this.keycloakService.goToAccountManagement();
   }
 
 }
