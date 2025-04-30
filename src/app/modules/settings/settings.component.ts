@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import SettingGeneralComponent from "./setting-general/setting-general.component";
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 interface SettingTabs {

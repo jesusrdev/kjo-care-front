@@ -17,6 +17,7 @@ import {
   RouterLink,
   RouterLinkActive,
 } from '@angular/router';
+import { SettingAnalysisComponent } from "./setting-analysis/setting-analysis.component";
 
 interface Mood {
   label: string;
@@ -45,7 +46,8 @@ const STANDARD_MOODS = ['Happy', 'Neutral', 'Sad', 'Anxious', 'Energetic'];
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
-  ],
+    SettingAnalysisComponent
+],
   templateUrl: './mood-analytics.component.html',
   styleUrl: './mood-analytics.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

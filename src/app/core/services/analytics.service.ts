@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { catchError, Observable, tap, throwError } from 'rxjs';
-import { MoodAnalyticsResponse } from '../interfaces/mood-analytics.response';
+import { MoodAnalyticsResponse, MoodTrendsAnalysis } from '../interfaces/mood-analytics.response';
 
 @Injectable({
   providedIn: 'root',
@@ -30,4 +30,17 @@ export class AnalyticsService {
         }),
       );
   }
+
+  getMoodTrendsAnalysis(month: number = 3): Observable<MoodTrendsAnalysis> {
+    return this.http.get<MoodTrendsAnalysis>(`${this.baseUrl}/user-mood/trends-analysis?months=${month}`
+    ).pipe(
+      tap((response) => console.log("Mood Trend Anlysis", response)),
+      catchError((error) => {
+        console.error("Error al traer las estadisticas", error)
+        return throwError(() => new Error("Error al obtener las analiticas de los estados de animo"))
+      })
+    );
+  }
+
+
 }
