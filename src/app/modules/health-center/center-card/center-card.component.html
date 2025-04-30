@@ -1,12 +1,29 @@
 <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300">
-  <div class="card-body">
-    <h3 class="card-title text-base">{{ entry.address }}</h3>
-    <p class="text-xs text-gray-500">
+  <div class="card-body p-4">
+    <div class="flex justify-between items-start">
+      <h3 class="card-title text-base">{{ entry.address }}</h3>
+      <i class="material-icons text-primary">place</i>
+    </div>
+    <p class="text-xs text-gray-500 mt-1">
+      <i class="material-icons text-xs align-text-top mr-1">schedule</i>
       {{ entry.date | date:'medium' }}
     </p>
-    <div class="mt-2 flex items-center gap-1 text-xs">
-      <span class="badge badge-sm">Lat: {{ entry.lat.toFixed(5) }}</span>
-      <span class="badge badge-sm">Lng: {{ entry.lng.toFixed(5) }}</span>
+    <div class="mt-2 flex flex-wrap items-center gap-2 text-xs">
+      <div class="badge badge-sm badge-info gap-1">
+        <i class="material-icons text-xs">location_on</i>
+        Lat: {{ entry.lat.toFixed(5) }}
+      </div>
+      <div class="badge badge-sm badge-info gap-1">
+        <i class="material-icons text-xs">location_on</i>
+        Lng: {{ entry.lng.toFixed(5) }}
+      </div>
+    </div>
+    <div class="card-actions justify-end mt-2">
+      <button class="btn btn-xs btn-ghost"
+              onclick="window.open(`https://www.google.com/maps/search/?api=1&query=${entry.lat},${entry.lng}`, '_blank')">
+        <i class="material-icons text-xs mr-1">open_in_new</i>
+        Ver en Google Maps
+      </button>
     </div>
   </div>
 </div>

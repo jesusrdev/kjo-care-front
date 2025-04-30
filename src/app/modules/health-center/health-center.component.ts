@@ -21,11 +21,15 @@ export default class HealthCenterComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     // Cuando la vista ha sido inicializada, refresca el mapa
+    // Incrementamos el tiempo para asegurarnos que el DOM esté completamente listo
     setTimeout(() => {
       if (this.mapComponent) {
+        console.log('Llamando a refreshMap desde el componente padre');
         this.mapComponent.refreshMap();
+      } else {
+        console.error('MapComponent no encontrado');
       }
-    }, 300); // Incrementamos el tiempo para asegurar que el componente esté completamente renderizado
+    }, 800);
   }
 
   // Carga inicial desde localStorage
