@@ -1,6 +1,91 @@
 @import "tailwindcss";
+/* Importaciones de Leaflet - asegurarse de que sean completas */
+@import "leaflet/dist/leaflet.css";
+/* Importamos también el estilo del geocoder si es necesario */
+@import "leaflet-control-geocoder/dist/Control.Geocoder.css";
 @plugin "daisyui";
 
+/* Estilos específicos para el mapa de Leaflet */
+#map, .leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Aseguramos que los popups se muestren correctamente sobre el mapa */
+.leaflet-popup-content-wrapper {
+  background-color: var(--color-base-100);
+  color: var(--color-base-content);
+}
+
+.leaflet-popup-tip {
+  background-color: var(--color-base-100);
+}
+/* Añadir al final del archivo */
+
+/* Estilos para los marcadores personalizados */
+.custom-div-icon {
+  background: transparent;
+  border: none;
+}
+
+.custom-div-icon i {
+  display: block;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-size: 24px !important;
+}
+
+/* Estilos para el panel de sugerencias */
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-radius: 4px;
+}
+
+.suggestion-item:hover {
+  background-color: var(--color-base-200);
+}
+
+.suggestion-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.suggestion-text {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Efecto de pulso para marcadores de hospitales */
+.hospital-marker {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+/* Resto del CSS existente */
 @plugin "daisyui/theme" {
   name: dark;
   default: false;

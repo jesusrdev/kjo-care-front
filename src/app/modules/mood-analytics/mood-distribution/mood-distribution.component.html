@@ -1,0 +1,442 @@
+<div class="space-y-6">
+  <!-- Título y controles -->
+  <div class="flex justify-between items-center">
+    <h3 class="text-xl font-semibold flex items-center">
+      <i class="material-icons mr-2 text-primary">pie_chart</i>
+      Mood Distribution
+    </h3>
+    <div class="btn-group">
+      <button
+        [class.btn-active]="viewMode() === 'donut'"
+        class="btn btn-sm"
+        (click)="toggleView('donut')"
+        title="Donut Chart">
+        <i class="material-icons text-sm">donut_large</i>
+      </button>
+      <button
+        [class.btn-active]="viewMode() === 'chart'"
+        class="btn btn-sm"
+        (click)="toggleView('chart')"
+        title="Pie Chart">
+        <i class="material-icons text-sm">pie_chart</i>
+      </button>
+      <button
+        [class.btn-active]="viewMode() === 'table'"
+        class="btn btn-sm"
+        (click)="toggleView('table')"
+        title="Data Table">
+        <i class="material-icons text-sm">table_chart</i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Gráfica y datos -->
+  @if (analyticsResource.isLoading() || animationInProgress()) {
+    <div class="flex justify-center items-center py-8">
+      <div class="loading-container">
+        <span class="loading loading-spinner loading-md text-primary"></span>
+      </div>
+    </div>
+  } @else if (analyticsResource.error()) {
+    <div class="alert alert-error">
+      <i class="material-icons stroke-current shrink-0">error_outline</i>
+      <span>Error al cargar la distribución de estados de ánimo.</span>
+      <button class="btn btn-sm" (click)="analyticsResource.reload()">
+        <i class="material-icons text-sm mr-1">refresh</i>
+        Reintentar
+      </button>
+    </div>
+  } @else {
+    @switch (viewMode()) {
+      @case ('donut') {
+        <div class="mood-distribution-chart fade-in">
+          <!-- Visualización con gráfico de donut -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Gráfico de donut -->
+            <div class="flex justify-center items-center">
+              <div class="relative w-[280px] h-[280px]">
+                <!-- Círculo SVG para donut -->
+                <svg viewBox="0 0 200 200" class="w-full h-full">
+                  <!-- Círculo base gris -->
+                  <circle cx="100" cy="100" r="90" fill="none" stroke="#eee" stroke-width="18" />
+
+                  <!-- Sectores del gráfico -->
+                  @for (mood of moods(); track mood.label; let i = $index) {
+                    @if (mood.percent > 0) {
+                      <circle
+                        cx="100"
+                        cy="100"
+                        r="90"
+                        fill="none"
+                        stroke-width="18"
+                        [attr.stroke]="mood.color"
+                        [attr.stroke-dasharray]="getStrokeDasharray(mood)"
+                        [attr.stroke-dashoffset]="getStrokeDashoffset(i)"
+                        transform="rotate(-90 100 100)"
+                        class="transition-all duration-1000"
+                      />
+                    }
+                  }
+
+                  <!-- Círculo interior (hueco del donut) -->
+                  <circle cx="100" cy="100" r="72" fill="#fff" />
+
+                  <!-- Centro del donut con estadísticas -->
+                  <text x="100" y="90" text-anchor="middle" class="donut-center-text" font-weight="bold" font-size="8">
+                    {{getTotalEntries()}}
+                  </text>
+                  <text x="100" y="110" text-anchor="middle" class="donut-center-text" font-size="5">
+                    Total entries
+                  </text>
+                </svg>
+
+                <!-- Iconos de los mood alrededor del donut -->
+                @for (mood of moods(); track mood.label; let i = $index) {
+                  @if (mood.percent >= 5) {
+                    <div class="absolute donut-icon"
+                      [style.left.%]="getLabelX(i) / 2 + 25"
+                      [style.top.%]="getLabelY(i) / 2 + 25">
+                      <div class="flex items-center justify-center w-8 h-8 rounded-full"
+                           [style.background-color]="mood.color">
+                        <i class="material-icons text-white text-sm">{{mood.icon}}</i>
+                      </div>
+                    </div>
+                  }
+                }
+              </div>
+            </div>
+
+            <!-- Leyenda -->
+            <div class="flex flex-col justify-center">
+              <div class="mood-legend space-y-3">
+                @for (mood of moods(); track mood.label) {
+                  <div class="legend-item flex items-center gap-3 p-2 rounded-lg hover:bg-base-200 transition-colors">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center shadow-sm"
+                         [style.background-color]="mood.color">
+                      <i class="material-icons text-white">{{mood.icon}}</i>
+                    </div>
+                    <div class="flex-1">
+                      <div class="flex justify-between">
+                        <span class="font-medium">{{mood.label}}</span>
+                        <span class="badge" [style.background-color]="mood.color" style="color: white">
+                          {{mood.percent}}%
+                        </span>
+                      </div>
+                      <div class="w-full bg-base-200 rounded-full h-2 mt-2 overflow-hidden">
+                        <div
+                          class="h-2 rounded-full transition-all duration-1000 ease-out"
+                          [style.width.%]="mood.percent"
+                          [style.background-color]="mood.color">
+                        </div>
+                      </div>
+                      <div class="text-xs text-gray-500 mt-1">
+                        {{mood.value}} entries
+                      </div>
+                    </div>
+                  </div>
+                }
+
+                @if (moods().length === 0) {
+                  <div class="text-center py-8 text-gray-500">
+                    <i class="material-icons text-5xl opacity-30">mood_bad</i>
+                    <p>No mood data available</p>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      @case ('chart') {
+        <div class="mood-distribution-chart fade-in">
+          <!-- Visualización gráfica clásica (circular) -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Gráfico circular -->
+            <div class="flex justify-center items-center">
+              <div class="relative w-[280px] h-[280px]">
+                <!-- Círculo SVG mejorado -->
+                <svg viewBox="0 0 200 200" class="mood-pie-chart drop-shadow-xl">
+                  <!-- Círculo base -->
+                  <circle cx="100" cy="100" r="100" fill="#f8f9fa" />
+
+                  @for (mood of moods(); track mood.label; let i = $index) {
+                    @if (mood.percent > 0) {
+                      <!-- Sector del gráfico con mejor animación -->
+                      <circle
+                        r="100"
+                        cx="100"
+                        cy="100"
+                        [attr.stroke-dasharray]="mood.percent * 6.28 + ' ' + (100 - mood.percent) * 6.28"
+                        [attr.stroke-dashoffset]="(25 - getAngleForLabel(i)/3.6) * 6.28 / 4"
+                        [style.stroke]="mood.color"
+                        stroke-width="100"
+                        fill="transparent"
+                        class="transition-all duration-1000 ease-out"
+                      ></circle>
+
+                      <!-- Etiqueta del porcentaje con mejor posicionamiento -->
+                      @if (mood.percent >= 5) {
+                        <g class="svg-icon" [attr.transform]="'translate(' + getLabelX(i) + ',' + getLabelY(i) + ')'">
+                          <circle r="14" cx="0" cy="0" fill="white" class="text-badge" />
+                          <text
+                            x="0"
+                            y="0"
+                            font-size="10"
+                            text-anchor="middle"
+                            dominant-baseline="middle"
+                            fill="#333"
+                            font-weight="bold"
+                            class="pie-label"
+                          >
+                            {{mood.percent}}%
+                          </text>
+                        </g>
+                      }
+                    }
+                  }
+
+                  @if (moods().length === 0) {
+                    <circle r="100" cx="100" cy="100" fill="#e2e8f0"></circle>
+                    <text x="100" y="100" text-anchor="middle" dominant-baseline="middle" fill="#94a3b8">No data</text>
+                  }
+                </svg>
+              </div>
+            </div>
+
+            <!-- Leyenda mejorada -->
+            <div class="flex flex-col justify-center">
+              <div class="mood-legend space-y-3 px-4">
+                @for (mood of moods(); track mood.label) {
+                  <div class="legend-item flex items-center gap-3 p-3 rounded-lg border border-base-200 hover:shadow-md transition-all">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center"
+                         [style.background-color]="mood.color">
+                      <i class="material-icons text-white">{{mood.icon}}</i>
+                    </div>
+                    <div class="flex-1">
+                      <div class="flex justify-between mb-1">
+                        <span class="font-medium">{{mood.label}}</span>
+                        <span class="font-semibold" [style.color]="mood.color">{{mood.percent}}%</span>
+                      </div>
+                      <div class="w-full bg-gray-100 rounded-full h-2">
+                        <div
+                          class="h-2 rounded-full transition-all duration-1000"
+                          [style.width.%]="mood.percent"
+                          [style.background-color]="mood.color">
+                        </div>
+                      </div>
+                      <div class="text-xs text-gray-500 mt-1">{{mood.value}} entries</div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      @case ('table') {
+        <!-- Vista de tabla mejorada -->
+        <div class="overflow-x-auto fade-in">
+          <table class="table table-zebra w-full">
+            <thead>
+              <tr>
+                <th class="bg-base-200">Mood</th>
+                <th class="bg-base-200">Entries</th>
+                <th class="bg-base-200">Percentage</th>
+                <th class="bg-base-200">Distribution</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (mood of moods(); track mood.label) {
+                <tr class="hover">
+                  <td class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center" [style.background-color]="mood.color">
+                      <i class="material-icons text-white text-sm">{{mood.icon}}</i>
+                    </div>
+                    <span class="font-medium">{{mood.label}}</span>
+                  </td>
+                  <td><span class="badge bg-base-200">{{mood.value}}</span></td>
+                  <td>
+                    <span class="badge" [style.background-color]="mood.color" style="color: white">
+                      {{mood.percent}}%
+                    </span>
+                  </td>
+                  <td class="w-48">
+                    <div class="w-full bg-base-200 rounded-full h-2">
+                      <div
+                        class="h-2 rounded-full transition-all duration-1000"
+                        [style.width.%]="mood.percent"
+                        [style.background-color]="mood.color">
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              }
+
+              @if (moods().length === 0) {
+                <tr>
+                  <td colspan="4" class="text-center py-8">
+                    <i class="material-icons text-5xl opacity-30 mb-2">sentiment_neutral</i>
+                    <div>No mood data available</div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+            <tfoot>
+              <tr>
+                <td class="font-medium">Total</td>
+                <td class="font-medium">{{getTotalEntries()}}</td>
+                <td class="font-medium">100%</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      }
+    }
+
+    <!-- Insights & Summary -->
+    <div class="mt-8 fade-in">
+      <h4 class="font-semibold mb-4 flex items-center">
+        <i class="material-icons mr-2 text-primary">psychology</i>
+        Mood Insights
+      </h4>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        @if (moods().length > 0) {
+          <div class="card bg-base-100 shadow-sm">
+            <div class="card-body p-4">
+              <h5 class="text-sm text-gray-500 font-normal">Dominant Mood</h5>
+              <div class="flex items-center gap-2 mt-1">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center"
+                     [style.background-color]="moods()[0]?.color">
+                  <i class="material-icons text-white text-sm">{{moods()[0]?.icon}}</i>
+                </div>
+                <div>
+                  <div class="text-lg font-semibold">{{moods()[0]?.label}}</div>
+                  <div class="text-xs" [style.color]="moods()[0]?.color">{{moods()[0]?.percent}}% of entries</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card bg-base-100 shadow-sm">
+            <div class="card-body p-4">
+              <h5 class="text-sm text-gray-500 font-normal">Total Entries</h5>
+              <div class="text-lg font-semibold mt-1">{{getTotalEntries()}}</div>
+              <div class="text-xs text-gray-500">Across all mood states</div>
+            </div>
+          </div>
+
+          <div class="card bg-base-100 shadow-sm">
+            <div class="card-body p-4">
+              <h5 class="text-sm text-gray-500 font-normal">Mood Balance</h5>
+              <div class="flex items-center mt-1">
+                <div class="text-lg font-semibold">
+                  @if (getMoodBalance() > 0) {
+                    <span class="text-success flex items-center">
+                      <i class="material-icons mr-1">trending_up</i>
+                      Positive
+                    </span>
+                  } @else {
+                    <span class="text-warning flex items-center">
+                      <i class="material-icons mr-1">trending_flat</i>
+                      Mixed
+                    </span>
+                  }
+                </div>
+              </div>
+              <div class="text-xs text-gray-500">Overall emotional pattern</div>
+            </div>
+          </div>
+        } @else {
+          <div class="col-span-3 text-center py-8 bg-base-100 rounded-lg shadow-sm">
+            <i class="material-icons text-5xl opacity-30 mb-2">analytics</i>
+            <div class="text-gray-500 font-medium">No insights available - Start tracking your moods</div>
+            <p class="text-gray-400 text-sm mt-2">Your mood insights will appear here once you've tracked some entries</p>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Información educativa -->
+  <div class="card bg-base-100 shadow-sm mt-6 fade-in">
+    <div class="card-body p-5">
+      <h4 class="card-title flex items-center text-lg font-medium">
+        <i class="material-icons mr-2 text-primary">info</i>
+        About Mood Distribution
+      </h4>
+      <p class="text-gray-600">
+        This chart shows the distribution of your tracked moods over the selected time period.
+        Understanding your mood patterns can help identify triggers and improve emotional well-being.
+      </p>
+      <div class="flex flex-wrap gap-3 mt-3">
+        @for (moodKey of ['Happy', 'Neutral', 'Sad', 'Anxious', 'Energetic']; track moodKey) {
+          <div class="flex items-center gap-1">
+            <div class="w-3 h-3 rounded-full" [style.background-color]="moodColors[moodKey]"></div>
+            <span class="text-xs text-gray-500">{{moodKey}}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .mood-pie-chart {
+    transform: rotate(-90deg);
+  }
+
+  .donut-center-text {
+    font-family: sans-serif;
+  }
+
+  .pie-label {
+    font-family: sans-serif;
+  }
+
+  .text-badge {
+    filter: drop-shadow(0px 2px 3px rgba(0,0,0,0.2));
+  }
+
+  .fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .donut-icon {
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease-out;
+  }
+
+  .donut-icon:hover {
+    transform: translate(-50%, -50%) scale(1.2);
+    z-index: 10;
+  }
+
+  .legend-item {
+    transition: all 0.2s ease;
+  }
+
+  .legend-item:hover {
+    transform: translateX(5px);
+  }
+</style>

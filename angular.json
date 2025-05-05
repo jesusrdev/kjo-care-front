@@ -27,9 +27,14 @@
               }
             ],
             "styles": [
+              "node_modules/leaflet/dist/leaflet.css",
+              "node_modules/leaflet-control-geocoder/dist/Control.Geocoder.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/leaflet/dist/leaflet.js",
+              "node_modules/leaflet-control-geocoder/dist/Control.Geocoder.js"
+            ]
           },
           "configurations": {
             "production": {
