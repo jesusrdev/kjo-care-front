@@ -30,7 +30,7 @@ export class UserModalComponent implements OnInit {
 
   formUtils = FormUtils;
 
-  user = input<UserResponse | null>(null);
+  user = input<UserRequest | null>(null);
   type = input<'create' | 'edit'>('create');
 
   title = signal('Add new user');
@@ -55,8 +55,6 @@ export class UserModalComponent implements OnInit {
 
   constructor() {
     effect(() => {
-      console.log('User seleccionado', this.userService.selectedUser);
-      console.log('User seleccionado', this.user());
       if (this.user()) {
         const role = this.user()?.roles.includes('admin') ? 'admin' : this.user()?.roles.includes('user') ? 'user' : '';
 

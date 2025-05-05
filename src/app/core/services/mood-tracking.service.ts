@@ -13,7 +13,7 @@ import type {
 })
 export class MoodStateService {
   private http = inject(HttpClient);
-  private readonly baseUrl = `${environment.apiUrl}`;
+  private readonly baseUrl = `${environment.apiUrl}/api/mind`;
 
   private moodStates = signal<Content[]>([]);
 

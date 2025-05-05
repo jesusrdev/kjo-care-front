@@ -12,6 +12,7 @@ import { CategoryService } from '../../core/services/category.service';
 import { ToastService } from '../../core/services/toast.service';
 import { blogs } from '../../shared/utils/local-data';
 import { BlogResponse } from '../../core/interfaces/blog-http.interface';
+import { DialogComponent } from '../../shared/components/dialog/dialog.component';
 
 @Component({
   selector: 'app-blog',
@@ -21,6 +22,7 @@ import { BlogResponse } from '../../core/interfaces/blog-http.interface';
     BlogTableComponent,
     BlogFilterComponent,
     BlogDetailComponent,
+    DialogComponent,
     ModalOpenButtonComponent
   ],
   templateUrl: './blog-page.component.html'
@@ -69,6 +71,27 @@ export default class BlogPageComponent {
 
   setFilter(filter: FilterDTO) {
     this.filter.set(filter);
+  }
+
+  deleteBlog() {
+    this.blogService.delete(this.blogService.selectedBlog?.blog.id ?? '').subscribe({
+      next: () => {
+        this.toastService.addToast({
+          message: 'Blog deleted successfully',
+          type: 'success',
+          duration: 4000
+        });
+
+        this.reload();
+      },
+      error: (error) => {
+        this.toastService.addToast({
+          message: 'Error deleting blog',
+          type: 'error',
+          duration: 4000
+        });
+      }
+    });
   }
 
   reload() {

@@ -67,17 +67,12 @@ export class BlogModalComponent implements OnInit {
     });
   }
 
-  //create a factory function
-
   onSubmit() {
     if (this.blogForm.invalid) {
       this.blogForm.markAllAsTouched();
       console.log('Form invalid');
       return;
     }
-
-    console.log(this.blogForm.value);
-
 
     const formData = new FormData();
     formData.append('title', this.blogForm.value.title);
@@ -94,8 +89,6 @@ export class BlogModalComponent implements OnInit {
     }
     formData.append('categoryId', this.blogForm.value.categoryId);
 
-    console.table(formData);
-
     if (this.blog()) {
       return this.blogService.update(formData, this.blog()!.id).pipe()
         .subscribe({
@@ -103,16 +96,17 @@ export class BlogModalComponent implements OnInit {
             this.toastService.addToast({
               message: 'Blog updated successfully',
               type: 'success',
-              duration: 3000
+              duration: 4000
             });
 
             this.reload.emit();
+            this.blogForm.clearValidators();
           },
           error: (error) => {
             this.toastService.addToast({
               message: 'Error updating blog',
               type: 'error',
-              duration: 3000
+              duration: 4000
             });
           }
         });
@@ -123,31 +117,23 @@ export class BlogModalComponent implements OnInit {
             this.toastService.addToast({
               message: 'Blog created successfully',
               type: 'success',
-              duration: 3000
+              duration: 4000
             });
 
             this.reload.emit();
+
+            this.blogForm.reset();
+            this.blogForm.clearValidators()
           },
           error: (error) => {
             this.toastService.addToast({
               message: 'Error creating blog',
               type: 'error',
-              duration: 3000
+              duration: 4000
             });
           }
         });
     }
-
-    // this.blogForm.reset(
-    //   {
-    //     title: '',
-    //     content: '',
-    //     image: null,
-    //     video: null,
-    //     category: '',
-    //     status: ''
-    //   }
-    // );
   }
 
   onFileChange(event: Event, field: 'image' | 'video') {

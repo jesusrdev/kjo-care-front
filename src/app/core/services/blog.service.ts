@@ -13,7 +13,7 @@ import { BlogResponse } from '../interfaces/blog-http.interface';
   providedIn: 'root'
 })
 export class BlogService {
-  private baseUrl: string = environment.apiUrl + '/blog/blogs';
+  private baseUrl: string = environment.apiUrl + '/api/mind/blog/blogs';
 
   private http = inject(HttpClient);
 

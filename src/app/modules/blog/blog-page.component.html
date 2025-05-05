@@ -4,7 +4,8 @@
     modalName="modal_blog_create"
     [classes]="'btn-primary'"
   >
-    + New Post
+    <i class="material-symbols-outlined">add</i>
+     New Post
   </modal-open-button>
 </div>
 
@@ -63,3 +64,11 @@
   [blog]="blogService.selectedBlog.blog"
   (reload)="reload()"
 ></blog-modal>
+
+<app-dialog
+  [title]="'Delete blog'"
+  [message]="'Are you sure you want to delete this blog?'"
+  [modalName]="'modal_blog_delete'"
+  [buttonText]="'Delete'"
+  (callback)="deleteBlog()"
+></app-dialog>

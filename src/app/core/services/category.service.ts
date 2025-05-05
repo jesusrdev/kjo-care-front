@@ -11,7 +11,7 @@ import { Category } from '../models/blog';
   providedIn: 'root'
 })
 export class CategoryService {
-  private baseUrl: string = environment.apiUrl + '/blog/category';
+  private baseUrl: string = environment.apiUrl + '/api/mind/blog/category';
 
   private http = inject(HttpClient);
 

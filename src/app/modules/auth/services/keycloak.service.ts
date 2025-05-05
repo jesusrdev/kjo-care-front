@@ -52,6 +52,8 @@ export class KeycloakService {
         // Recuperar la información del usuario
         const userProfile = await keycloak.loadUserProfile() as UserProfile;
         userProfile.token = keycloak.token || '';
+        console.table(userProfile);
+        console.table(await keycloak.loadUserInfo());
 
         // Actualizar la señal con el perfil completo
         this._userProfile.set(userProfile);

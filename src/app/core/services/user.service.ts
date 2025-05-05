@@ -9,7 +9,7 @@ import { UserRequest, UserResponse } from '../interfaces/user-http.interface';
   providedIn: 'root'
 })
 export class UserService {
-  private readonly baseUrl = `${environment.apiUrl}/auth/users`;
+  private readonly baseUrl = `${environment.apiUrl}/api/mind/auth/users`;
   private http = inject(HttpClient);
 
   private _selectedUser = signal<UserRequest | null>(null);

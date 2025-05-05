@@ -2,7 +2,9 @@
   <div class="modal-box max-h-11/12">
     <!-- X BUTTON -->
     <form method="dialog">
-      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+        <i class="material-icons-outlined !text-xl">close</i>
+      </button>
     </form>
 
     <h2 class="text-lg font-semibold">{{ title() }}</h2>
@@ -69,7 +71,9 @@
             required
             autocomplete="off"
           />
-          <i (click)="toggleShowPassword()">eye</i>
+          <i (click)="toggleShowPassword()" class="material-icons-outlined !text-xl hover:cursor-pointer">
+            {{ showPassword() ? 'visibility_off' : 'visibility' }}
+          </i>
         </label>
         <p class="validator-hint hidden">
           {{ formUtils.getFieldError(userForm, 'password') }}
@@ -96,7 +100,7 @@
 
 
       <div class="modal-action mt-4">
-        <form method="dialog">
+        <form method="dialog" class="space-x-2">
           <button class="btn">Close</button>
 
           <button
