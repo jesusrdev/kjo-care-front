@@ -12,10 +12,11 @@
     </thead>
     <tbody>
       @for (user of users(); track $index) {
+        @let role = user.roles.includes('admin') ? 'Admin' : user.roles.includes('user') ? 'User' : 'No role';
         <tr class="hover:bg-base-200">
           <td>{{ user.firstName }} {{ user.lastName }}</td>
           <td>{{ user.email }}</td>
-          <td>{{ 'ROLE' }}</td>
+          <td>{{ role }}</td>
           <td>
             @if (user.enabled) {
               <span class="badge badge-primary">Active</span>

@@ -57,17 +57,20 @@
         </p>
       </fieldset>
 
-      <fieldset class="fieldset">
+      <fieldset class="fieldset" [ngClass]="{ 'hidden': type() == 'edit' }">
         <legend class="fieldset-legend">Password</legend>
-        <input
-          type="text"
-          class="input validator w-full"
-          formControlName="password"
-          placeholder="Password"
-          minlength="3"
-          required
-          autocomplete="off"
-        />
+        <label class="input validator w-full">
+          <input
+            type="{{ showPassword() ? 'text' : 'password' }}"
+            class=" w-full"
+            formControlName="password"
+            placeholder="Password"
+            minlength="3"
+            required
+            autocomplete="off"
+          />
+          <i (click)="toggleShowPassword()">eye</i>
+        </label>
         <p class="validator-hint hidden">
           {{ formUtils.getFieldError(userForm, 'password') }}
         </p>

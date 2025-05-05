@@ -1,6 +1,6 @@
 export interface UserRequest {
-  // username: string;
   id?: string;
+  username: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -8,7 +8,7 @@ export interface UserRequest {
   roles: string[];
 }
 
-export interface UserResponse extends UserRequest {
+export interface UserResponse extends Exclude<UserRequest, 'password'> {
   id: string;
   createdTimestamp: number;
   enabled: boolean;

@@ -10,7 +10,7 @@ import { BlogService } from '../../../core/services/blog.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { UserService } from '../../../core/services/user.service';
-import { UserRequest } from '../../../core/interfaces/user-http.interface';
+import { UserRequest, UserResponse } from '../../../core/interfaces/user-http.interface';
 
 @Component({
   selector: 'user-modal',
@@ -30,12 +30,13 @@ export class UserModalComponent implements OnInit {
 
   formUtils = FormUtils;
 
-  user = input<UserRequest | null>(null);
+  user = input<UserResponse | null>(null);
   type = input<'create' | 'edit'>('create');
 
   title = signal('Add new user');
   nameButton = signal('Save');
   nameModal = computed(() => this.type() === 'create' ? 'modal_user_create' : 'modal_user_edit');
+  showPassword = signal(false);
 
   userForm = this.fb.group({
     email: ['', [Validators.required, Validators.minLength(3)]],
@@ -57,14 +58,14 @@ export class UserModalComponent implements OnInit {
       console.log('User seleccionado', this.userService.selectedUser);
       console.log('User seleccionado', this.user());
       if (this.user()) {
-        const roles = this.user()?.roles ? this.user()?.roles[0] : '';
+        const role = this.user()?.roles.includes('admin') ? 'admin' : this.user()?.roles.includes('user') ? 'user' : '';
 
         this.userForm.patchValue({
           email: this.user()?.email,
           firstName: this.user()?.firstName,
           lastName: this.user()?.lastName,
-          password: this.user()?.password,
-          roles: roles
+          password: 'without password',
+          roles: role
         });
       }
     });
@@ -79,6 +80,7 @@ export class UserModalComponent implements OnInit {
 
     const request: UserRequest = {
       id: this.user()?.id,
+      username: this.userForm.value.email!,
       email: this.userForm.value.email!,
       firstName: this.userForm.value.firstName!,
       lastName: this.userForm.value.lastName!,
@@ -138,5 +140,9 @@ export class UserModalComponent implements OnInit {
     //     status: ''
     //   }
     // );
+  }
+
+  toggleShowPassword() {
+    this.showPassword.set(!this.showPassword());
   }
 }

@@ -23,7 +23,7 @@ export class UserService {
   }
 
   getAll() : Observable<UserResponse[]> {
-    return this.http.get<UserResponse[]>(`${this.baseUrl}/list`);
+    return this.http.get<UserResponse[]>(`${this.baseUrl}/listAll`);
   }
 
   create(request: UserRequest) {
@@ -31,6 +31,10 @@ export class UserService {
   }
 
   update(request: UserRequest) {
-    return this.http.put(`${this.baseUrl}/update/${request.id}`, request);
+    return this.http.put<void>(`${this.baseUrl}/update/${request.id}`, request);
+  }
+
+  delete(id: string) {
+    return this.http.delete<void>(`${this.baseUrl}/delete/${id}`);
   }
 }
