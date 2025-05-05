@@ -83,7 +83,7 @@
 
                   <!-- Centro del donut con estadísticas -->
                   <text x="100" y="90" text-anchor="middle" class="donut-center-text" font-weight="bold" font-size="8">
-                    {{getTotalEntries()}}
+                    {{ getTotalEntries() }}
                   </text>
                   <text x="100" y="110" text-anchor="middle" class="donut-center-text" font-size="5">
                     Total entries
@@ -94,11 +94,11 @@
                 @for (mood of moods(); track mood.label; let i = $index) {
                   @if (mood.percent >= 5) {
                     <div class="absolute donut-icon"
-                      [style.left.%]="getLabelX(i) / 2 + 25"
-                      [style.top.%]="getLabelY(i) / 2 + 25">
+                         [style.left.%]="getLabelX(i) / 2 + 25"
+                         [style.top.%]="getLabelY(i) / 2 + 25">
                       <div class="flex items-center justify-center w-8 h-8 rounded-full"
                            [style.background-color]="mood.color">
-                        <i class="material-icons text-white text-sm">{{mood.icon}}</i>
+                        <i class="material-icons text-white text-sm">{{ mood.icon }}</i>
                       </div>
                     </div>
                   }
@@ -113,13 +113,13 @@
                   <div class="legend-item flex items-center gap-3 p-2 rounded-lg hover:bg-base-200 transition-colors">
                     <div class="w-10 h-10 rounded-full flex items-center justify-center shadow-sm"
                          [style.background-color]="mood.color">
-                      <i class="material-icons text-white">{{mood.icon}}</i>
+                      <i class="material-icons text-white">{{ mood.icon }}</i>
                     </div>
                     <div class="flex-1">
                       <div class="flex justify-between">
-                        <span class="font-medium">{{mood.label}}</span>
+                        <span class="font-medium">{{ mood.label }}</span>
                         <span class="badge" [style.background-color]="mood.color" style="color: white">
-                          {{mood.percent}}%
+                          {{ mood.percent }}%
                         </span>
                       </div>
                       <div class="w-full bg-base-200 rounded-full h-2 mt-2 overflow-hidden">
@@ -130,7 +130,7 @@
                         </div>
                       </div>
                       <div class="text-xs text-gray-500 mt-1">
-                        {{mood.value}} entries
+                        {{ mood.value }} entries
                       </div>
                     </div>
                   </div>
@@ -147,7 +147,6 @@
           </div>
         </div>
       }
-
       @case ('chart') {
         <div class="mood-distribution-chart fade-in">
           <!-- Visualización gráfica clásica (circular) -->
@@ -189,7 +188,7 @@
                             font-weight="bold"
                             class="pie-label"
                           >
-                            {{mood.percent}}%
+                            {{ mood.percent }}%
                           </text>
                         </g>
                       }
@@ -211,12 +210,12 @@
                   <div class="legend-item flex items-center gap-3 p-3 rounded-lg border border-base-200 hover:shadow-md transition-all">
                     <div class="w-10 h-10 rounded-full flex items-center justify-center"
                          [style.background-color]="mood.color">
-                      <i class="material-icons text-white">{{mood.icon}}</i>
+                      <i class="material-icons text-white">{{ mood.icon }}</i>
                     </div>
                     <div class="flex-1">
                       <div class="flex justify-between mb-1">
-                        <span class="font-medium">{{mood.label}}</span>
-                        <span class="font-semibold" [style.color]="mood.color">{{mood.percent}}%</span>
+                        <span class="font-medium">{{ mood.label }}</span>
+                        <span class="font-semibold" [style.color]="mood.color">{{ mood.percent }}%</span>
                       </div>
                       <div class="w-full bg-gray-100 rounded-full h-2">
                         <div
@@ -225,7 +224,7 @@
                           [style.background-color]="mood.color">
                         </div>
                       </div>
-                      <div class="text-xs text-gray-500 mt-1">{{mood.value}} entries</div>
+                      <div class="text-xs text-gray-500 mt-1">{{ mood.value }} entries</div>
                     </div>
                   </div>
                 }
@@ -251,15 +250,16 @@
               @for (mood of moods(); track mood.label) {
                 <tr class="hover">
                   <td class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-full flex items-center justify-center" [style.background-color]="mood.color">
-                      <i class="material-icons text-white text-sm">{{mood.icon}}</i>
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center"
+                         [style.background-color]="mood.color">
+                      <i class="material-icons text-white text-sm">{{ mood.icon }}</i>
                     </div>
-                    <span class="font-medium">{{mood.label}}</span>
+                    <span class="font-medium">{{ mood.label }}</span>
                   </td>
-                  <td><span class="badge bg-base-200">{{mood.value}}</span></td>
+                  <td><span class="badge bg-base-200">{{ mood.value }}</span></td>
                   <td>
                     <span class="badge" [style.background-color]="mood.color" style="color: white">
-                      {{mood.percent}}%
+                      {{ mood.percent }}%
                     </span>
                   </td>
                   <td class="w-48">
@@ -309,12 +309,13 @@
               <h5 class="text-sm text-gray-500 font-normal">Dominant Mood</h5>
               <div class="flex items-center gap-2 mt-1">
                 <div class="w-8 h-8 rounded-full flex items-center justify-center"
-                     [style.background-color]="moods()[0]?.color">
-                  <i class="material-icons text-white text-sm">{{moods()[0]?.icon}}</i>
+                     [style.background-color]="moods().at(0)?.color">
+                  <i class="material-icons text-white text-sm">{{ moods().at(0)?.icon }}</i>
                 </div>
                 <div>
-                  <div class="text-lg font-semibold">{{moods()[0]?.label}}</div>
-                  <div class="text-xs" [style.color]="moods()[0]?.color">{{moods()[0]?.percent}}% of entries</div>
+                  <div class="text-lg font-semibold">{{ moods().at(0)?.label }}</div>
+                  <div class="text-xs" [style.color]="moods().at(0)?.color">{{ moods().at(0)?.percent }}% of entries
+                  </div>
                 </div>
               </div>
             </div>
@@ -323,7 +324,7 @@
           <div class="card bg-base-100 shadow-sm">
             <div class="card-body p-4">
               <h5 class="text-sm text-gray-500 font-normal">Total Entries</h5>
-              <div class="text-lg font-semibold mt-1">{{getTotalEntries()}}</div>
+              <div class="text-lg font-semibold mt-1">{{ getTotalEntries() }}</div>
               <div class="text-xs text-gray-500">Across all mood states</div>
             </div>
           </div>
@@ -375,7 +376,7 @@
         @for (moodKey of ['Happy', 'Neutral', 'Sad', 'Anxious', 'Energetic']; track moodKey) {
           <div class="flex items-center gap-1">
             <div class="w-3 h-3 rounded-full" [style.background-color]="moodColors[moodKey]"></div>
-            <span class="text-xs text-gray-500">{{moodKey}}</span>
+            <span class="text-xs text-gray-500">{{ moodKey }}</span>
           </div>
         }
       </div>
