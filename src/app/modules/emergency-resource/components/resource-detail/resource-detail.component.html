@@ -1,0 +1,90 @@
+<dialog id="{{ 'modal_emergency_resource_detail' }}" class="modal">
+  <div class="modal-box w-11/12 max-w-xl max-h-11/12">
+    <!-- X BUTTON -->
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+        <i class="material-symbols-outlined !text-xl">close</i>
+      </button>
+    </form>
+
+    <h2 class="text-xl font-semibold">{{ resource().name }}</h2>
+    <div class="flex items-center gap-2 text-sm opacity-80">
+      <span>{{ resource().user.firstName }} {{ resource().user.lastName }}</span>
+    </div>
+
+    <div class="space-y-4 pt-4">
+      @if (resource().resourceUrl?.includes('videos')) {
+        <div class="aspect-video w-full bg-muted rounded-md flex items-center justify-center">
+          <video controls class="w-full h-full">
+            <source src="{{ resource().resourceUrl }}" type="video/mp4" />
+          </video>
+        </div>
+      } @else if (resource().resourceUrl?.includes('images')) {
+        <div class="aspect-video w-full bg-muted rounded-md flex items-center justify-center">
+          <img src="{{ resource().resourceUrl }}" alt="blog image" class="w-full h-full" />
+        </div>
+      }
+
+      <div class="">
+        <p class="text-sm font-medium mb-1">Description:</p>
+        <p class="text-sm opacity-80">{{ resource().description }}</p>
+      </div>
+
+      <ul class="list gap-2">
+        <li class="text-sm font-medium mb-1 tracking-wide">Contacts:</li>
+
+        @for (contact of resource().contacts; track $index) {
+          <li class="list-row border rounded-box p-3 items-center border-base-300 shadow-sm">
+            <i class="material-symbols-outlined !text-xl ">phone</i>
+            <p class="">{{ contact }}</p>
+
+            <button class="btn btn-square btn-ghost" (click)="copyToClipboard(contact)">
+              <i class="material-symbols-outlined !text-xl">content_copy</i>
+            </button>
+          </li>
+        }
+      </ul>
+
+      <ul class="list gap-2">
+        <li class="text-sm font-medium mb-1 tracking-wide">Resource Links:</li>
+
+        @for (link of resource().links; track $index) {
+          <li class="list-row border rounded-box p-3 items-center border-base-300 shadow-sm">
+            <i class="material-symbols-outlined !text-xl">link</i>
+            <p class="mt-1">{{ link }}</p>
+
+            <button class="btn btn-square btn-ghost" (click)="copyToClipboard(link)">
+              <i class="material-symbols-outlined !text-xl">content_copy</i>
+            </button>
+            <a class="btn btn-square btn-ghost" href="{{ link }}" target="_blank">
+              <i class="material-symbols-outlined !text-xl">arrow_outward</i>
+            </a>
+          </li>
+        }
+      </ul>
+
+      <div class="text-sm opacity-80 flex justify-between items-center gap-2 flex-wrap">
+        <span>Created: {{ resource().createdDate | date }}</span>
+        <span>Access count: {{ resource().accessCount }}</span>
+      </div>
+
+    </div>
+
+    <div class="modal-action mt-4">
+      <form method="dialog" class="space-x-2">
+        <button class="btn">Close</button>
+
+        <modal-open-button
+          [modalName]="'modal_emergency_resource'"
+          [label]="'Edit'"
+          [classes]="'btn-primary'"
+        >
+          <i class="material-symbols-outlined !text-xl mr-2">edit_square</i>
+        </modal-open-button>
+      </form>
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>

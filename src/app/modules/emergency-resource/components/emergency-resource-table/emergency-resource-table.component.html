@@ -37,11 +37,11 @@
     </tr>
     </thead>
     <tbody>
-      @if (resources.isLoading()) {
+      @if (resources().isLoading()) {
         <div class="flex justify-center p-4">
           <span class="loading loading-spinner loading-lg text-primary"></span>
         </div>
-      } @else if (resources.error()) {
+      } @else if (resources().error()) {
         <td colspan="7">
           <div class="alert alert-error mt-4">
             <i class="material-symbols-outlined !text-xl">error</i>
@@ -77,7 +77,11 @@
             </td>
             <td class="text-center">{{ resource.accessCount }}</td>
             <td class="flex items-center gap-1">
-              <modal-open-button [modalName]="'modal_emergency_resource_detail'" [type]="'icon'">
+              <modal-open-button
+                [modalName]="'modal_emergency_resource_detail'"
+                [type]="'icon'"
+                (click)="resourceService.selectedResource.set(resource)"
+              >
                 <i class="material-symbols-outlined !text-xl">visibility</i>
               </modal-open-button>
 

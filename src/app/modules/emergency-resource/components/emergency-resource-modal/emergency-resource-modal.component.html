@@ -1,0 +1,166 @@
+<dialog id="modal_emergency_resource" class="modal">
+  <div class="modal-box max-h-11/12">
+    <!-- X BUTTON -->
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+        <i class="material-icons-outlined !text-xl">close</i>
+      </button>
+    </form>
+
+    <h2 class="text-lg font-semibold">{{ title() }}</h2>
+
+    <form [formGroup]="resourceForm" (ngSubmit)="onSubmit()">
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Name</legend>
+        <input
+          type="text"
+          class="input validator w-full"
+          formControlName="name"
+          placeholder="Resource Name"
+          minlength="3"
+          required
+          autocomplete="off"
+        />
+        <p class="validator-hint hidden">
+          {{ formUtils.getFieldError(resourceForm, 'name') }}
+        </p>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Description</legend>
+        <textarea
+          class="textarea validator w-full"
+          formControlName="description"
+          placeholder="Description"
+          required
+          minlength="5"
+          autocomplete="off"
+        ></textarea>
+        <p class="validator-hint hidden">
+          {{ formUtils.getFieldError(resourceForm, 'description') }}
+        </p>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Image</legend>
+        <input
+          type="file"
+          class="file-input validator w-full"
+          formControlName="image"
+          accept="image/*"
+          autocomplete="off"
+          (change)="onFileChange($event, 'image')"
+        />
+        <p class="validator-hint hidden">
+          {{ formUtils.getFieldError(resourceForm, 'image') }}
+        </p>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Video</legend>
+        <input
+          type="file"
+          accept="video/*"
+          class="file-input validator w-full"
+          formControlName="video"
+          autocomplete="off"
+          (change)="onFileChange($event, 'video')"
+        />
+        <p class="validator-hint hidden">
+          {{ formUtils.getFieldError(resourceForm, 'video') }}
+        </p>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Emergency Contacts</legend>
+        <div class="flex flex-col gap-2">
+          @for (contact of resourceForm.value['contacts']; track $index; ) {
+            <div class="flex flex-row gap-2">
+              <label class="input validator w-full">
+                <i class="material-symbols-outlined !text-xl">phone</i>
+                <input
+                  type="text"
+                  class="w-full"
+                  placeholder="Contact {{ $index + 1 }}"
+                  required
+                  [value]="contact"
+                  (input)="updateInput($event, $index, 'contacts')"
+                />
+              </label>
+              <button
+                class="btn btn-square btn-warning"
+                type="button"
+                (click)="removeInput($event, $index, 'contacts')"
+              >
+                <i class="material-symbols-outlined !text-xl">close</i>
+              </button>
+            </div>
+          }
+          <button
+            class="btn btn-square"
+            type="button"
+            (click)="addInput($event, 'contacts')"
+          >
+            <i class="material-symbols-outlined !text-xl">add</i>
+          </button>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Resource Links</legend>
+        <div class="flex flex-col gap-2">
+          @for (link of resourceForm.value['links']; track $index; ) {
+            <div class="flex flex-row gap-2">
+              <label class="input validator w-full">
+                <i class="material-symbols-outlined !text-xl">link</i>
+                <input
+                  type="url"
+                  class="w-full"
+                  placeholder="Link {{ $index + 1 }}"
+                  required
+                  [value]="link"
+                  (input)="updateInput($event, $index, 'links')"
+                />
+              </label>
+              <button
+                class="btn btn-square btn-warning"
+                type="button"
+                (click)="removeInput($event, $index, 'links')"
+              >
+                <i class="material-symbols-outlined !text-xl">close</i>
+              </button>
+            </div>
+          }
+          <button
+            class="btn btn-square"
+            type="button"
+            (click)="addInput($event, 'links')"
+          >
+            <i class="material-symbols-outlined !text-xl">add</i>
+          </button>
+        </div>
+      </fieldset>
+
+      <div class="modal-action mt-4">
+        <form method="dialog" class="space-x-2">
+          <button class="btn">Close</button>
+
+          <button
+            class="btn btn-primary"
+            [disabled]="resourceForm.invalid"
+            type="submit"
+            (click)="onSubmit()"
+          >
+            {{ nameButton() }}
+          </button>
+        </form>
+
+      </div>
+    </form>
+
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
+

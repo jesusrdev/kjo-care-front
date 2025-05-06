@@ -1,7 +1,6 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, input, ResourceRef, signal } from '@angular/core';
 import { ModalOpenButtonComponent } from '../../../../shared/components/modal-open-button/modal-open-button.component';
 import { EmergencyResourceService } from '../../../../core/services/emergency-resource.service';
-import { rxResource } from '@angular/core/rxjs-interop';
 import { EmergencyResourceResponse } from '../../../../core/interfaces/emergency-resource-http.interface';
 
 @Component({
@@ -18,7 +17,7 @@ export class EmergencyResourceTableComponent {
   orderBy = signal('newest');
 
   filteredResources = computed<EmergencyResourceResponse[]>(() => {
-    let temporal = this.resources.value() ?? [];
+    let temporal = this.resources().value() ?? [];
     const orderBy = this.orderBy();
 
     if (orderBy === 'newest') {
@@ -38,12 +37,9 @@ export class EmergencyResourceTableComponent {
     return temporal;
   });
 
-  resources = rxResource({
-    loader: () => this.resourceService.getAll()
-  });
+  resources = input.required<ResourceRef<EmergencyResourceResponse[] | undefined>>();
 
   reload() {
-    this.resources.reload();
+    this.resources().reload();
   }
-
 }
