@@ -36,22 +36,21 @@
       </div>
       <div class="flex gap-4">
         <div>
-          <h3 class="text-sm font-medium mb-2">Reactions</h3>
+          <h3 class="text-sm font-medium mb-2">About</h3>
           <div class="flex gap-4">
             <div class="text-center">
               <p class="text-lg font-bold">{{ blog().reactionCount }}</p>
-              <p class="text-xs text-muted-foreground">Likes</p>
+              <p class="text-xs text-muted-foreground">Reactions</p>
             </div>
-          </div>
-        </div>
-
-        <div>
-          <h3 class="text-sm font-medium mb-2">Comments</h3>
-          <div class="flex gap-4">
-            <div class="text-center">
-              <p class="text-lg font-bold">{{ blog().commentCount }}</p>
-              <p class="text-xs text-muted-foreground">Likes</p>
-            </div>
+            <modal-open-button
+              [modalName]="'modal_blog_comments'"
+              (click)="blogService.selectedBlog = blog()"
+            >
+              <div class="text-center">
+                <p class="text-lg font-bold">{{ blog().commentCount }}</p>
+                <p class="text-xs text-muted-foreground">Comments</p>
+              </div>
+            </modal-open-button>
           </div>
         </div>
       </div>

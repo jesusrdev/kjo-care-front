@@ -8,6 +8,8 @@
       <th>Category</th>
       <th>Date</th>
       <th>Status</th>
+      <th>Reactions</th>
+      <th>Comments</th>
       <th>Actions</th>
     </tr>
     </thead>
@@ -32,6 +34,8 @@
               <span class="badge badge-primary">Published</span>
             }
           </td>
+          <td class="text-center">{{ blog.reactionCount }}</td>
+          <td class="text-center">{{ blog.commentCount }}</td>
           <td class="flex items-center gap-1">
             <modal-open-button
               [modalName]="'modal_blog_detail'"

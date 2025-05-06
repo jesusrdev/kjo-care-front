@@ -1,0 +1,65 @@
+<li class="list-row gap-y-2 px-0">
+  <div class="avatar avatar-placeholder">
+    <div class="bg-neutral text-neutral-content w-12 rounded-full">
+      <span class="">{{ userLetters() }}</span>
+    </div>
+  </div>
+  <div class="list-col-wrap flex items-center justify-between text-center w-full">
+    <span class="w-0 border h-full mx-auto"></span>
+  </div>
+
+  <div class="flex items-center gap-2 w-full">
+    <div class="w-full">
+      <div class="font-semibold">{{ comment().userId.firstName }} {{ comment().userId.lastName }}</div>
+      @if (comment().date) {
+        <relative-time
+          class="text-xs opacity-80"
+          datetime="{{ comment().date }}"
+          precision="day"
+          tense="past"
+        ></relative-time>
+      } @else {
+        <span class="text-xs opacity-80">No date</span>
+      }
+    </div>
+    <div class="flex items-center">
+      <modal-open-button
+        [modalName]="'modal_blog_comment'"
+        [classes]="'btn-square btn-ghost'"
+        (click)="commentService.selectedComment = selectComment('reply')"
+      >
+        <i class="material-symbols-outlined !text-xl">reply</i>
+      </modal-open-button>
+
+      <modal-open-button
+        [modalName]="'modal_blog_comment'"
+        [classes]="'btn-square btn-ghost'"
+        (click)="commentService.selectedComment = selectComment('edit')"
+      >
+        <i class="material-symbols-outlined !text-xl">edit</i>
+      </modal-open-button>
+
+      <modal-open-button
+        [modalName]="'modal_blog_comment_delete'"
+        [classes]="'btn-square btn-ghost'"
+        (click)="commentService.selectedComment = selectComment('delete')"
+      >
+        <i class="material-symbols-outlined !text-xl">delete</i>
+      </modal-open-button>
+    </div>
+  </div>
+
+  <div class="list-col-wrap">
+    <p>{{ comment().content }}</p>
+    @if (comment().childrenComments.length > 0) {
+      <div class="list">
+        @for (child of comment().childrenComments; track child; ) {
+          <blog-comment
+            [comment]="child"
+            [commentParentId]="comment().id"
+          ></blog-comment>
+        }
+      </div>
+    }
+  </div>
+</li>

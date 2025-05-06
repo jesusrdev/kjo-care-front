@@ -13,6 +13,7 @@ import { ToastService } from '../../core/services/toast.service';
 import { blogs } from '../../shared/utils/local-data';
 import { BlogResponse } from '../../core/interfaces/blog-http.interface';
 import { DialogComponent } from '../../shared/components/dialog/dialog.component';
+import { BlogCommentsModalComponent } from './blog-comments-modal/blog-comments-modal.component';
 
 @Component({
   selector: 'app-blog',
@@ -23,7 +24,8 @@ import { DialogComponent } from '../../shared/components/dialog/dialog.component
     BlogFilterComponent,
     BlogDetailComponent,
     DialogComponent,
-    ModalOpenButtonComponent
+    ModalOpenButtonComponent,
+    BlogCommentsModalComponent
   ],
   templateUrl: './blog-page.component.html'
 })

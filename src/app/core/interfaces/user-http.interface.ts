@@ -13,3 +13,6 @@ export interface UserResponse extends Exclude<UserRequest, 'password'> {
   createdTimestamp: number;
   enabled: boolean;
 }
+
+export interface UserInfo extends Exclude<UserRequest, 'password,roles,email'> {
+}

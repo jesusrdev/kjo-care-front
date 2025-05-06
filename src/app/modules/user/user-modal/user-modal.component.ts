@@ -127,17 +127,6 @@ export class UserModalComponent implements OnInit {
           }
         });
     }
-
-    // this.blogForm.reset(
-    //   {
-    //     title: '',
-    //     content: '',
-    //     image: null,
-    //     video: null,
-    //     category: '',
-    //     status: ''
-    //   }
-    // );
   }
 
   toggleShowPassword() {
