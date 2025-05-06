@@ -29,7 +29,7 @@
             <modal-open-button
               [modalName]="'modal_user_edit'"
               [type]="'icon'"
-              (click)="userService.selectedUser = user"
+              (click)="userService.selectUserResponse(user)"
             >
               <i class="material-symbols-outlined !text-xl">edit_square</i>
             </modal-open-button>
@@ -37,7 +37,7 @@
             <modal-open-button
               [modalName]="'modal_user_delete'"
               [type]="'icon'"
-              (click)="userService.selectedUser = user"
+              (click)="userService.selectUserResponse(user)"
             >
               <i class="material-symbols-outlined !text-xl">delete</i>
             </modal-open-button>

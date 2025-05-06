@@ -22,7 +22,20 @@ export class UserService {
     this._selectedUser.set(user);
   }
 
-  getAll() : Observable<UserResponse[]> {
+  selectUserResponse(user: UserResponse) {
+    const user2 = user as UserResponse;
+    this._selectedUser.set({
+      id: user2.id,
+      username: user2.username,
+      email: user2.email,
+      firstName: user2.firstName,
+      lastName: user2.lastName,
+      password: '',
+      roles: user2.roles
+    });
+  }
+
+  getAll(): Observable<UserResponse[]> {
     return this.http.get<UserResponse[]>(`${this.baseUrl}/listAll`);
   }
 
