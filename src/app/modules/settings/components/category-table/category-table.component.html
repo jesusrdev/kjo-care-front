@@ -26,13 +26,15 @@
           <span class="loading loading-spinner loading-lg text-primary"></span>
         </div>
       } @else if (categories.error()) {
-        <div class="alert alert-error mt-4">
-          <i class="material-symbols-outlined !text-xl">error</i>
-          <span>Error al cargar las categorías. Por favor intenta de nuevo.</span>
-          <button class="btn btn-sm" (click)="reload()">
-            Retry
-          </button>
-        </div>
+        <td colspan="2">
+          <div class="alert alert-error mt-4">
+            <i class="material-symbols-outlined !text-xl">error</i>
+            <span>Error al cargar las categorías. Por favor intenta de nuevo.</span>
+            <button class="btn btn-sm" (click)="reload()">
+              Retry
+            </button>
+          </div>
+        </td>
       } @else {
         @for (category of categories.value(); track category.id) {
           <tr class="hover:bg-base-200">

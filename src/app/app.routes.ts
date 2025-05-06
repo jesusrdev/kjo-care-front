@@ -23,6 +23,10 @@ export const routes: Routes = [
         path: 'users',
         loadComponent: () => import('./modules/user/user-page.component')
       },
+      {
+        path: 'emergency-resources',
+        loadComponent: () => import('./modules/emergency-resource/emergency-resource.component')
+      },
       { path: 'blog-management', loadComponent: () => import('./modules/blog/blog-page.component') },
       { path: 'moods', loadChildren: () => import('./modules/mood-analytics/mood-analytics.routes') },
       { path: 'settings', loadChildren: () => import('./modules/settings/settings.routes') },

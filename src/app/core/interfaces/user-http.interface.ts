@@ -8,11 +8,10 @@ export interface UserRequest {
   roles: string[];
 }
 
-export interface UserResponse extends Exclude<UserRequest, 'password'> {
+export interface UserResponse extends Omit<UserRequest, 'password'> {
   id: string;
   createdTimestamp: number;
   enabled: boolean;
 }
 
-export interface UserInfo extends Exclude<UserRequest, 'password,roles,email'> {
-}
+export type UserInfo = Omit<UserRequest, 'password' | 'roles' | 'email'> ;

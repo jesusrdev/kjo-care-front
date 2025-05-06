@@ -1,0 +1,70 @@
+<div
+  class="stats stats-vertical lg:stats-horizontal w-full gap-3 *:!border *:!border-base-300 *:!rounded-box *:shadow-sm py-1">
+  @if (stats.isLoading()) {
+    @for (item of [1, 2, 3, 4]; track $index) {
+      <div class="stat space-y-2.5">
+        <div class="stat-title skeleton w-1/2 h-2.5"></div>
+        <div class="stat-value skeleton w-12 h-8"></div>
+        <div class="stat-desc skeleton w-full h-2.5"></div>
+      </div>
+    }
+  } @else if (stats.error()) {
+    <div class="stat">
+      <div class="stat-title">Total Resources</div>
+      <div class="stat-value">00</div>
+      <div class="stat-desc">Active emergency resources</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">Total Contacts</div>
+      <div class="stat-value">00</div>
+      <div class="stat-desc">Emergency contact numbers</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">Total Links</div>
+      <div class="stat-value">00</div>
+      <div class="stat-desc">Resource website links</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">Total Accesses</div>
+      <div class="stat-value">00</div>
+      <div class="stat-desc">Resource access count</div>
+    </div>
+  } @else {
+    <div class="stat">
+      <div class="stat-title">Total Resources</div>
+      <div class="stat-value">{{ stats.value()?.totalResources }}</div>
+      <div class="stat-desc">Active emergency resources</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">Total Contacts</div>
+      <div class="stat-value">{{ stats.value()?.totalContacts }}</div>
+      <div class="stat-desc">Emergency contact numbers</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">Total Links</div>
+      <div class="stat-value">{{ stats.value()?.totalLinks }}</div>
+      <div class="stat-desc">Resource website links</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">Total Accesses</div>
+      <div class="stat-value">{{ stats.value()?.totalAccesses }}</div>
+      <div class="stat-desc">Resource access count</div>
+    </div>
+  }
+</div>
+
+@if (stats.error()) {
+  <div class="alert alert-error">
+    <i class="material-symbols-outlined !text-xl">error</i>
+    <span>Error al cargar los estadísticas. Por favor intenta de nuevo.</span>
+    <button class="btn btn-sm" (click)="reload()">
+      Retry
+    </button>
+  </div>
+}
