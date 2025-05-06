@@ -26,8 +26,8 @@ export default class SettingsComponent {
       path: '/dashboard/settings/mood-states',
     },
     {
-      name: 'Notificaciones',
-      path: '/dashboard/settings/notification',
+      name: 'Categories',
+      path: '/dashboard/settings/category',
     }
   ]);
 }

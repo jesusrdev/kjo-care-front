@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../../environments/environment';
@@ -15,6 +15,11 @@ export class CategoryService {
 
   private http = inject(HttpClient);
 
+  selectedCategory = signal<Category>({
+    id: 0,
+    name: ''
+  });
+
   findAll(): Observable<Category[]> {
     return this.http.get<Category[]>(`${this.baseUrl}`);
   }
@@ -28,7 +33,7 @@ export class CategoryService {
   }
 
   update(request: Category, id: number): Observable<Category> {
-    return this.http.put<Category>(`${this.baseUrl}/${id}`, request);
+    return this.http.patch<Category>(`${this.baseUrl}/${id}`, request);
   }
 
   delete(id: number): Observable<void> {
