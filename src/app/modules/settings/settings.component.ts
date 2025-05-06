@@ -18,7 +18,7 @@ export default class SettingsComponent {
   settingsTabs = signal<SettingTabs[]>([
     {
       name: 'General',
-      path: '/dashboard/settings',
+      path: '/dashboard/settings/general',
       exact: true
     },
     {
