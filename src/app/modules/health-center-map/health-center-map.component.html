@@ -64,7 +64,50 @@
     @if (dataType() === 'api' && centers.isLoading()) {
       <progress class="progress w-full"></progress>
     }
-    <div id="map" class="aspect-video w-full h-[500px] border rounded-lg shadow-md"></div>
+    <div id="map" class="aspect-video w-full h-[500px] border rounded-lg shadow-md relative"></div>
+
+    <!-- Popup implementado con Angular y Tailwind -->
+    <div id="map-popup" class="hidden absolute z-10" [class.hidden]="!popupVisible()">
+      @if (selectedCenter()) {
+        <div class="bg-base-100 rounded-lg shadow-lg p-4 w-80">
+          <div class="flex justify-between items-start w-full">
+            <h3 class="text-lg font-bold text-primary w-full flex-1">{{ selectedCenter()['name'] }}</h3>
+            <button
+              (click)="closePopup()"
+              class="btn btn-ghost btn-sm"
+              aria-label="Cerrar">
+              <i class="material-symbols-outlined !text-xl">close</i>
+            </button>
+          </div>
+
+          <div class="mt-2 max-h-52 overflow-y-auto text-sm w-full">
+            @if (selectedCenter()['allData']?.distance) {
+              <p class="font-bold text-accent">
+                <i class="material-symbols-outlined align-bottom">distance</i>
+                {{ selectedCenter()['allData'].distance }} km
+              </p>
+            }
+            <p class="mb-1"><strong>Institución:</strong> {{ selectedCenter()['institution'] }}</p>
+            <p class="mb-1"><strong>Categoría:</strong> {{ selectedCenter()['category'] }}</p>
+            <p class="mb-1"><strong>Dirección:</strong> {{ selectedCenter()['address'] }}</p>
+            <p class="mb-1"><strong>Teléfono:</strong> {{ selectedCenter()['phone'] }}</p>
+            @if (selectedCenter()['website']) {
+              <p class="mb-1"><strong>Web:</strong>
+                <a href="{{ selectedCenter()['website'] }}" target="_blank" class="text-blue-500 hover:underline">
+                  {{ selectedCenter()['website'] }}
+                </a>
+              </p>
+            }
+            @if (selectedCenter()['horario']) {
+              <p class="mb-1"><strong>Horario:</strong> {{ selectedCenter()['horario'] }}</p>
+            }
+            @if (selectedCenter()['director']) {
+              <p class="mb-1"><strong>Director:</strong> {{ selectedCenter()['director'] }}</p>
+            }
+          </div>
+        </div>
+      }
+    </div>
   </div>
 
   <input type="radio" name="blogs" class="tab" aria-label="Grid View" />
@@ -99,6 +142,4 @@
       ></center-grid>
     }
   </div>
-
 </div>
-

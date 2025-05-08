@@ -16,6 +16,7 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { CenterGridComponent } from './center-grid/center-grid.component';
 import { HealthCenterResponse } from '../../core/interfaces/health-center-http.interface';
 import { ToastService } from '../../core/services/toast.service';
+import { defaults as defaultControls } from 'ol/control';
 
 @Component({
   selector: 'app-health-center-map',
@@ -28,6 +29,8 @@ import { ToastService } from '../../core/services/toast.service';
 export default class HealthCenterMapComponent implements OnInit {
   map!: Map;
   popup!: Overlay;
+  popupVisible = signal(false);
+  selectedCenter = signal<any>(null);
 
   healthCenters = signal<any[]>([]);
   searchQuery = signal('');
@@ -63,7 +66,6 @@ export default class HealthCenterMapComponent implements OnInit {
           break;
       }
     });
-
   }
 
   ngOnInit() {
@@ -81,46 +83,47 @@ export default class HealthCenterMapComponent implements OnInit {
       view: new View({
         center: fromLonLat([-77.0428, -12.0464]), // [longitud, latitud]
         zoom: 12
+      }),
+      // Personalizar los controles para que ocupen menos espacio
+      controls: defaultControls({
+        zoom: true,
+        rotate: false,
+        attribution: false // Ocultar la atribución para ahorrar espacio
       })
     });
+
+    // Añadir atribución en una posición menos intrusiva
+    const attribution = document.createElement('div');
+    attribution.className = 'ol-attribution';
+    attribution.innerHTML = '© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors';
+    attribution.style.position = 'absolute';
+    attribution.style.bottom = '0';
+    attribution.style.right = '0';
+    attribution.style.fontSize = '10px';
+    attribution.style.background = 'rgba(255,255,255,0.7)';
+    attribution.style.padding = '2px 5px';
+    attribution.style.borderRadius = '3px 0 0 0';
+    document.getElementById('map')?.appendChild(attribution);
   }
 
   setupPopup() {
-    // Crear componente Angular para el popup
-    const popupElement = document.createElement('div');
-    popupElement.className = 'ol-popup';
-    popupElement.innerHTML = `
-      <div id="popup-content"></div>
-      <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-    `;
+    // Crear overlay para el popup
+    const popupElement = document.getElementById('map-popup');
+    if (!popupElement) return;
 
-    // Añadir al DOM usando Angular
-    document.body.appendChild(popupElement);
-
-    const popupContent = document.getElementById('popup-content');
-    const popupCloser = document.getElementById('popup-closer');
-
-    // Crear overlay para el popup (sin la opción que causa error)
     this.popup = new Overlay({
       element: popupElement,
-      autoPan: true
-      // Eliminamos autoPanAnimation que causa el error
+      autoPan: true,
+      offset: [0, -20],
+      positioning: 'bottom-center'
     });
-    this.map.addOverlay(this.popup);
 
-    // Evento para cerrar el popup
-    if (popupCloser) {
-      popupCloser.addEventListener('click', () => {
-        this.popup.setPosition(undefined);
-        popupCloser.blur();
-        return false;
-      });
-    }
+    this.map.addOverlay(this.popup);
 
     // Evento para mostrar el popup al hacer clic en un marcador
     this.map.on('click', (evt) => {
       const feature = this.map.forEachFeatureAtPixel(evt.pixel, (feature) => feature);
-      if (feature && popupContent) {
+      if (feature) {
         const geometry = feature.getGeometry() as Point;
         if (!geometry) return;
 
@@ -129,25 +132,19 @@ export default class HealthCenterMapComponent implements OnInit {
 
         // Verificar si tenemos las propiedades necesarias
         if (properties['name']) {
-          // Construir contenido HTML con la información del centro de salud
-          popupContent.innerHTML = `
-          <div class="bg-base-100 p-4 rounded-lg shadow-lg max-w-96 aspect-[16/10]">
-            <h3 class="text-lg font-bold">${properties['name']}</h3>
-            <div class="mt-2 overflow-y-scroll max-h-64">
-              <p><strong>Institución:</strong> ${properties['institution']}</p>
-              <p><strong>Categoría:</strong> ${properties['category']}</p>
-              <p><strong>Dirección:</strong> ${properties['address']}</p>
-              <p><strong>Teléfono:</strong> ${properties['phone']}</p>
-              ${properties['website'] ? `<p><strong>Web:</strong> <a href="${properties['website']}" target="_blank">${properties['website']}</a></p>` : ''}
-              ${properties['horario'] ? `<p><strong>Horario:</strong> ${properties['horario']}</p>` : ''}
-              ${properties['director'] ? `<p><strong>Director:</strong> ${properties['director']}</p>` : ''}
-            </div>
-          </div>
-          `;
+          this.selectedCenter.set(properties);
+          this.popupVisible.set(true);
           this.popup.setPosition(coordinates);
         }
+      } else {
+        this.closePopup();
       }
     });
+  }
+
+  closePopup() {
+    this.popupVisible.set(false);
+    this.popup.setPosition(undefined);
   }
 
   onFileChange(event: Event) {
@@ -225,12 +222,12 @@ export default class HealthCenterMapComponent implements OnInit {
       }
 
       // Crear la feature con los datos completos
-      // CORREGIDO: Invertimos lat y lon según tu comentario, ahora [lat, lon]
+      // CORREGIDO: Invertimos lat y lon según tu comentario, ahora [lon, lat]
       const feature = new Feature({
         geometry: new Point(fromLonLat([lon, lat])),
         properties: {
           ['name']: center['Nombre del establecimiento'] || center['name'] || 'Sin nombre',
-          ['category']: center['Categoria'] || '--------',
+          ['category']: center['Categoria'] || 'No especificada',
           ['address']: center['Direccion'] || center['address'] || '--------',
           ['phone']: center['Telefono'] || center['phone'] || 'No especificado',
           ['institution']: center['Institucion'] || 'No especificada',
@@ -257,7 +254,7 @@ export default class HealthCenterMapComponent implements OnInit {
           anchor: [0.5, 1],
           anchorXUnits: 'fraction',
           anchorYUnits: 'fraction',
-          src: 'https://openlayers.org/en/latest/examples/data/icon.png', // Icono de OpenLayers
+          src: 'https://openlayers.org/en/latest/examples/data/icon.png',
           scale: 0.8
         })
       })
@@ -267,6 +264,16 @@ export default class HealthCenterMapComponent implements OnInit {
     this.map.getLayers().clear();
     this.map.addLayer(new TileLayer({ source: new OSM() }));
     this.map.addLayer(vectorLayer);
+
+    // Añadir cursor pointer al pasar sobre los marcadores
+    this.map.on('pointermove', (e) => {
+      const pixel = this.map.getEventPixel(e.originalEvent);
+      const hit = this.map.hasFeatureAtPixel(pixel);
+      const mapElement = document.getElementById('map');
+      if (mapElement) {
+        mapElement.style.cursor = hit ? 'pointer' : '';
+      }
+    });
 
     // Ajustar la vista para mostrar todos los marcadores
     if (features.length > 0) {
