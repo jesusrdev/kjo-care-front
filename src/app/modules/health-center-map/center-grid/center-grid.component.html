@@ -1,0 +1,10 @@
+<p class="opacity-80 italic">Here we just use api data</p>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  @for (center of centers(); track $index) {
+    <center-card [center]="center"></center-card>
+  } @empty {
+    <div class="text-center col-span-3">
+      <p class="text-sm">No Health Centers found.</p>
+    </div>
+  }
+</div>

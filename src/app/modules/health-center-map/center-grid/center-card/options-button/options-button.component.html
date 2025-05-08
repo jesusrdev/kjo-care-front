@@ -1,0 +1,38 @@
+<div class="dropdown dropdown-end">
+  <div tabindex="0" role="button" class="btn btn-square btn-ghost">...</div>
+  <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 shadow-sm w-36 space-y-1">
+    <li>
+      <modal-open-button
+        [modalName]="'modal_blog_detail'"
+        [label]="'View'"
+        [type]="'dropdown'"
+        class="p-0 w-full flex"
+        (click)="blogService.selectedBlog = blog()"
+      >
+        <i class="material-symbols-outlined !text-xl mr-2">visibility</i>
+      </modal-open-button>
+    </li>
+    <li>
+      <modal-open-button
+        [modalName]="'modal_blog_edit'"
+        [label]="'Edit'"
+        [type]="'dropdown'"
+        class="p-0 w-full flex"
+        (click)="blogService.selectedBlog = blog()"
+      >
+        <i class="material-symbols-outlined !text-xl mr-2">edit_square</i>
+      </modal-open-button>
+    </li>
+    <li>
+      <modal-open-button
+        [modalName]="'modal_blog_delete'"
+        [label]="'Delete'"
+        [type]="'dropdown'"
+        class="p-0 w-full flex text-error"
+        (click)="blogService.selectedBlog = blog()"
+      >
+        <i class="material-symbols-outlined !text-xl mr-2">delete</i>
+      </modal-open-button>
+    </li>
+  </ul>
+</div>

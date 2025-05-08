@@ -28,6 +28,8 @@
     "leaflet": "^1.9.3",
     "leaflet-control-geocoder": "^3.1.0",
     "ngx-echarts": "^19.0.0",
+    "ol": "^10.5.0",
+    "papaparse": "^5.5.2",
     "postcss": "^8.5.3",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.0.15",

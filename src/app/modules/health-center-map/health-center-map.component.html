@@ -1,0 +1,104 @@
+<h1 class="sm:text-3xl text-2xl font-bold">Health Centers</h1>
+
+<div class="p-2 py-4">
+  <div class="flex flex-col gap-2 md:flex-row md:items-end flex-wrap">
+    <div class="flex-grow">
+      <label for="fileInput" class="block text-sm mb-1">Cargar CSV:</label>
+      <input id="fileInput" type="file" class="file-input file-input-bordered w-full"
+             (change)="onFileChange($event)" accept=".csv" />
+    </div>
+    <button (click)="useLocalData()" class="btn btn-primary line-clamp-1">Usar Plataforma Nacional de Datos Abiertos
+    </button>
+    <button (click)="useDataType('api')" class="btn btn-primary flex-grow">Usar datos de la API</button>
+  </div>
+
+  <div class="flex flex-col gap-2 md:flex-row md:items-end">
+    <div class="flex-grow">
+      <label for="searchInput" class="block text-sm font-medium mb-1">Buscar:</label>
+      <div class="flex">
+        <input
+          id="searchInput"
+          type="text"
+          class="input input-bordered w-full"
+          placeholder="Buscar centro de salud, categoría o dirección"
+          value="{{ searchQuery() }}"
+          (input)="searchQuery.set(searchInput.value)"
+          #searchInput
+        />
+        <button (click)="filterCenters()" class="btn btn-primary ml-2">Buscar</button>
+      </div>
+    </div>
+
+    <button (click)="findNearbyCenters()" class="btn btn-secondary w-full md:w-auto mt-2 md:mt-0">
+      <i class="material-symbols-outlined !text-xl">location_on</i>
+      Centros cercanos
+    </button>
+
+    <button (click)="clearFilters()" class="btn btn-warning w-full md:w-auto mt-2 md:mt-0">
+      <i class="material-symbols-outlined !text-xl">clear</i>
+      Clear
+    </button>
+  </div>
+  @if (dataType() === 'api' && centers.error()) {
+    <div class="alert alert-error mt-4">
+      <i class="material-symbols-outlined !text-xl">error</i>
+      <span>
+        Error al cargar los centros de salud. Por favor, intenta nuevamente.
+      </span>
+      <button class="btn btn-sm" (click)="centers.reload()">
+        Retry
+      </button>
+    </div>
+  }
+
+  @if (centersLength() > 0) {
+    <div class="mt-2 text-sm">
+      {{ centersLength() }} Health Centers
+    </div>
+  }
+</div>
+
+<div class="tabs tabs-box">
+  <input type="radio" name="blogs" class="tab" aria-label="Map View" checked="checked" />
+  <div class="tab-content bg-base-100 border-base-300 p-6">
+    @if (dataType() === 'api' && centers.isLoading()) {
+      <progress class="progress w-full"></progress>
+    }
+    <div id="map" class="aspect-video w-full h-[500px] border rounded-lg shadow-md"></div>
+  </div>
+
+  <input type="radio" name="blogs" class="tab" aria-label="Grid View" />
+  <div class="tab-content bg-base-100 border-base-300 p-6">
+    @if (centers.isLoading() && dataType() === 'api') {
+      <p class="opacity-80 italic">Here we just use api data</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        @for (i of [1, 2, 3]; track $index) {
+          <div class="card bg-base-100 shadow-sm border-[0.5px] border-base-300 h-full">
+            <div class="card-body">
+              <div class="flex items-center justify-between">
+                <div class="skeleton h-5 w-1/2"></div>
+              </div>
+              <div class="skeleton h-2 w-full mb-2"></div>
+              <div class="skeleton h-3 w-full"></div>
+              <div class="skeleton h-3 w-full"></div>
+              <div class="skeleton h-3 w-full"></div>
+              <div class="skeleton h-3 w-2/3"></div>
+              <div class="card-actions justify-between items-center">
+                <div class="skeleton w-1/2 h-4 bg-primary mt-2"></div>
+                <div class="btn btn-neutral">
+                  <span class="loading loading-spinner"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <center-grid
+        [centers]="filteredCenters() || []"
+      ></center-grid>
+    }
+  </div>
+
+</div>
+
