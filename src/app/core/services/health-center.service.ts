@@ -47,16 +47,35 @@ export class HealthCenterService {
     return this.http.post<void>(`${this.baseUrl}?name=${request.name}&address=${request.address}&phone=${request.phone}&latitude=${request.latitude}&longitude=${request.longitude}`, request);
   }
 
-  // update(request: FormData, id: number): Observable<void> {
-  //   return this.http.put<void>(`${this.baseUrl}/${id}`, request);
-  // }
-  //
-  // delete(id: number): Observable<void> {
-  //   return this.http.delete<void>(`${this.baseUrl}/${id}`);
-  // }
+  update(request: HealthCenterRequest, id: number): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/${id}?name=${request.name}&address=${request.address}&phone=${request.phone}&latitude=${request.latitude}&longitude=${request.longitude}`, request);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
 
   async getLocalData() {
     const response = await fetch('/centers.csv');
     return response.blob().then(blob => new File([blob], 'centers.csv'));
+  }
+
+  clearSelectedCenter() {
+    this.selectedCenter.set({
+      name: '',
+      address: '',
+      phone: '',
+      latitude: 0,
+      longitude: 0,
+      id: 0,
+      user: {
+        firstName: '',
+        lastName: '',
+        username: '',
+      },
+      status: '',
+      createdDate: '',
+      modifiedDate: ''
+    });
   }
 }

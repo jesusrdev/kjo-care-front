@@ -3,7 +3,7 @@
     <div class="flex flex-col">
       <div class="flex items-center justify-between">
         <h2 class="card-title line-clamp-2">{{ center().name }}</h2>
-        <!--        <blog-card-options-button [blog]="blog()" />-->
+        <center-card-options-button [center]="center()" />
       </div>
       <div class="flex items-center gap-2 text-xs opacity-80">
         <span class="line-clamp-2">{{ center().address }}</span>
@@ -21,7 +21,7 @@
         </div>
       }
       <modal-open-button
-        [modalName]="'modal_center_detail'"
+        [modalName]="'modal_health_center_detail'"
         [label]="'View'"
         (click)="centerService.selectedCenter.set(center())"
       >

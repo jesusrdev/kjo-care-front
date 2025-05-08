@@ -5,6 +5,8 @@ import {
 } from '../../../../../shared/components/modal-open-button/modal-open-button.component';
 import { BlogService } from '../../../../../core/services/blog.service';
 import { BlogResponse } from '../../../../../core/interfaces/blog-http.interface';
+import { HealthCenterService } from '../../../../../core/services/health-center.service';
+import { HealthCenterResponse } from '../../../../../core/interfaces/health-center-http.interface';
 
 @Component({
   selector: 'center-card-options-button',
@@ -14,7 +16,7 @@ import { BlogResponse } from '../../../../../core/interfaces/blog-http.interface
   ]
 })
 export class OptionsButtonComponent {
-  blogService = inject(BlogService);
+  centerService = inject(HealthCenterService);
 
-  blog = input.required<BlogResponse>();
+  center = input.required<HealthCenterResponse>();
 }

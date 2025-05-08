@@ -17,13 +17,21 @@ import { CenterGridComponent } from './center-grid/center-grid.component';
 import { HealthCenterResponse } from '../../core/interfaces/health-center-http.interface';
 import { ToastService } from '../../core/services/toast.service';
 import { defaults as defaultControls } from 'ol/control';
+import { HealthCenterModalComponent } from './health-center-modal/health-center-modal.component';
+import { HealthCenterDetailComponent } from './health-center-detail/health-center-detail.component';
+import { DialogComponent } from '../../shared/components/dialog/dialog.component';
+import { ModalOpenButtonComponent } from '../../shared/components/modal-open-button/modal-open-button.component';
 
 @Component({
   selector: 'app-health-center-map',
   templateUrl: './health-center-map.component.html',
   styleUrls: ['./health-center-map.component.css'],
   imports: [
-    CenterGridComponent
+    CenterGridComponent,
+    HealthCenterModalComponent,
+    HealthCenterDetailComponent,
+    DialogComponent,
+    ModalOpenButtonComponent
   ]
 })
 export default class HealthCenterMapComponent implements OnInit {
@@ -399,5 +407,25 @@ export default class HealthCenterMapComponent implements OnInit {
 
   useDataType(type: 'none' | 'csv' | 'api' | 'local') {
     this.dataType.set(type);
+  }
+
+  deleteHealthCenter() {
+    this.centersService.delete(this.centersService.selectedCenter().id).subscribe({
+      next: () => {
+        this.toastService.addToast({
+          message: 'Health Center deleted successfully',
+          type: 'success',
+          duration: 4000
+        });
+        this.centers.reload();
+      },
+      error: (error) => {
+        this.toastService.addToast({
+          message: 'Error deleting health center',
+          type: 'error',
+          duration: 4000
+        });
+      }
+    });
   }
 }
