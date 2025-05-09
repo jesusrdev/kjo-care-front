@@ -1,3 +1,162 @@
-<h1 class="text-3xl font-bold">Dashboard</h1>
+<div class="p-6 bg-base-200 min-h-screen">
+  <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
 
-<p class="py-1">Welcome to the dashboard page!</p>
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="flex justify-center items-center h-64">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+  } @else {
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <!-- Total Users Card -->
+      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
+        <div class="card-body p-6">
+          <div class="flex justify-between items-start">
+            <div>
+              <h2 class="text-lg font-medium text-base-content/70">Total Users</h2>
+              <div class="text-4xl font-bold mt-1">{{ totalUsers() | number }}</div>
+              <p class="text-sm mt-1">
+                <span [class]="totalUsersChange() >= 0 ? 'text-success' : 'text-error'">
+                  {{ totalUsersChange() >= 0 ? '+' : '' }}{{ totalUsersChange() | number:'1.1-1' }}% from last month
+                </span>
+              </p>
+            </div>
+            <div class="bg-base-200 rounded-full p-3 text-base-content/60">
+              <i class="material-icons">people</i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Blog Posts Card -->
+      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
+        <div class="card-body p-6">
+          <div class="flex justify-between items-start">
+            <div>
+              <h2 class="text-lg font-medium text-base-content/70">Blog Posts</h2>
+              <div class="text-4xl font-bold mt-1">{{ blogPosts() | number }}</div>
+              <p class="text-sm mt-1">
+                <span [class]="blogPostsChange() >= 0 ? 'text-success' : 'text-error'">
+                  {{ blogPostsChange() >= 0 ? '+' : '' }}{{ blogPostsChange() | number:'1.1-1' }}% from last month
+                </span>
+              </p>
+            </div>
+            <div class="bg-base-200 rounded-full p-3 text-base-content/60">
+              <i class="material-icons">article</i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mood Entries Card -->
+      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
+        <div class="card-body p-6">
+          <div class="flex justify-between items-start">
+            <div>
+              <h2 class="text-lg font-medium text-base-content/70">Mood Entries</h2>
+              <div class="text-4xl font-bold mt-1">{{ moodEntries() | number }}</div>
+              <p class="text-sm mt-1">
+                <span [class]="moodEntriesChange() >= 0 ? 'text-success' : 'text-error'">
+                  {{ moodEntriesChange() >= 0 ? '+' : '' }}{{ moodEntriesChange() | number:'1.1-1' }}% from last month
+                </span>
+              </p>
+            </div>
+            <div class="bg-base-200 rounded-full p-3 text-base-content/60">
+              <i class="material-icons">sentiment_satisfied</i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Health Centers Card -->
+      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
+        <div class="card-body p-6">
+          <div class="flex justify-between items-start">
+            <div>
+              <h2 class="text-lg font-medium text-base-content/70">Health Centers</h2>
+              <div class="text-4xl font-bold mt-1">{{ healthCenters() | number }}</div>
+              <p class="text-sm mt-1">
+                <span [class]="healthCentersChange() >= 0 ? 'text-success' : 'text-error'">
+                  {{ healthCentersChange() >= 0 ? '+' : '' }}{{ healthCentersChange() | number:'1.1-1' }}% from last month
+                </span>
+              </p>
+            </div>
+            <div class="bg-base-200 rounded-full p-3 text-base-content/60">
+              <i class="material-icons">local_hospital</i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tabs tabs-boxed mb-6 bg-base-300 inline-flex">
+      <!-- <button class="tab" [class.tab-active]="activeTab() === 'Active Users'" (click)="setActiveTab('Active Users')">Active Users</button> -->
+      <button class="tab" [class.tab-active]="activeTab() === 'Blog Posts'" (click)="setActiveTab('Blog Posts')">Blog Posts</button>
+      <button class="tab" [class.tab-active]="activeTab() === 'Mood States'" (click)="setActiveTab('Mood States')">Mood States</button>
+    </div>
+
+    <!-- Content Area -->
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        @if (activeTab() === 'Mood States') {
+          <div>
+            <h2 class="text-2xl font-bold mb-2">Mood States</h2>
+            <p class="text-base-content/70 mb-6">Most recorded mood states over the last 30 days.</p>
+
+            <!-- Chart -->
+            <div class="h-80 w-full">
+              <div echarts [options]="chartOption()" class="h-full w-full"></div>
+            </div>
+          </div>
+        }
+        @else if (activeTab() === 'Blog Posts') {
+          <div>
+            <h2 class="text-2xl font-bold mb-2">Blog Posts</h2>
+            <p class="text-base-content/70 mb-6">Blog post publishing statistics for the current month.</p>
+
+            <!-- Blog Chart -->
+            @if (hasBlogStats()) {
+              <div class="h-80 w-full">
+                <div echarts [options]="blogChartOption()" class="h-full w-full"></div>
+              </div>
+
+              <!-- Blog Stats Summary -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                <div class="stat bg-base-200 rounded-lg">
+                  <div class="stat-title">Total Posts</div>
+                  <div class="stat-value text-primary">{{ getTotalBlogPosts() }}</div>
+                  <div class="stat-desc">This month</div>
+                </div>
+
+                <div class="stat bg-base-200 rounded-lg">
+                  <div class="stat-title">Most Active Day</div>
+                  @if (getMostActiveDay()) {
+                    <div class="stat-value">{{ mostActiveDayFormatted() }}</div>
+                    <div class="stat-desc">{{ mostActiveDayCount() }} posts</div>
+                  } @else {
+                    <div class="stat-value">N/A</div>
+                    <div class="stat-desc">No data available</div>
+                  }
+                </div>
+
+                <div class="stat bg-base-200 rounded-lg">
+                  <div class="stat-title">Daily Average</div>
+                  <div class="stat-value">{{ getDailyAverage() | number:'1.1-1' }}</div>
+                  <div class="stat-desc">Posts per day</div>
+                </div>
+              </div>
+            } @else {
+              <div class="flex flex-col items-center justify-center p-8 text-center">
+                <i class="material-icons text-4xl text-base-content/30 mb-4">article</i>
+                <div class="text-base-content/50">No blog statistics available for this month.</div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+  }
+</div>
