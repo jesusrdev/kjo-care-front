@@ -1,0 +1,38 @@
+<div class="flex justify-between items-center gap-2 flex-wrap mb-3 p-2">
+  <h1 class="sm:text-3xl text-2xl font-bold">Emergency Resources</h1>
+  <modal-open-button
+    modalName="modal_emergency_resource"
+    [classes]="'btn-primary'"
+    (click)="clearSelectedResource()"
+  >
+    <i class="material-symbols-outlined !text-xl">add</i>
+    Add Resource
+  </modal-open-button>
+</div>
+
+<resource-stats [stats]="stats"></resource-stats>
+
+<div class="my-6 card shadow-md border-[1px] border-neutral-content/20 p-6">
+  <div class="">
+    <h2 class="sm:text-2xl text-xl font-semibold">Emergency Resources</h2>
+    <p class="text-sm opacity-90">Manage your application emergency resources, their contacts and links.</p>
+  </div>
+
+  <emergency-resource-table [resources]="resources"></emergency-resource-table>
+</div>
+
+
+<!-- MODALS -->
+<resource-detail></resource-detail>
+
+<emergency-resource-modal
+  (reload)="reload()"
+></emergency-resource-modal>
+
+<app-dialog
+  [title]="'Delete resource'"
+  [message]="'Are you sure you want to delete this resource?'"
+  [modalName]="'modal_emergency_resource_delete'"
+  [buttonText]="'Delete'"
+  (callback)="deleteResource()"
+></app-dialog>

@@ -9,7 +9,7 @@ import { UserRequest, UserResponse } from '../interfaces/user-http.interface';
   providedIn: 'root'
 })
 export class UserService {
-  private readonly baseUrl = `${environment.apiUrl}/auth/users`;
+  private readonly baseUrl = `${environment.apiUrl}/api/mind/auth/users`;
   private http = inject(HttpClient);
 
   private _selectedUser = signal<UserRequest | null>(null);
@@ -22,8 +22,21 @@ export class UserService {
     this._selectedUser.set(user);
   }
 
-  getAll() : Observable<UserResponse[]> {
-    return this.http.get<UserResponse[]>(`${this.baseUrl}/list`);
+  selectUserResponse(user: UserResponse) {
+    const user2 = user as UserResponse;
+    this._selectedUser.set({
+      id: user2.id,
+      username: user2.username,
+      email: user2.email,
+      firstName: user2.firstName,
+      lastName: user2.lastName,
+      password: '',
+      roles: user2.roles
+    });
+  }
+
+  getAll(): Observable<UserResponse[]> {
+    return this.http.get<UserResponse[]>(`${this.baseUrl}/listAll`);
   }
 
   create(request: UserRequest) {
@@ -31,6 +44,10 @@ export class UserService {
   }
 
   update(request: UserRequest) {
-    return this.http.put(`${this.baseUrl}/update/${request.id}`, request);
+    return this.http.put<void>(`${this.baseUrl}/update/${request.id}`, request);
+  }
+
+  delete(id: string) {
+    return this.http.delete<void>(`${this.baseUrl}/delete/${id}`);
   }
 }

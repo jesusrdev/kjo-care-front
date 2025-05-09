@@ -5,11 +5,14 @@ import { UserService } from '../../core/services/user.service';
 import { UserTableComponent } from './user-table/user-table.component';
 import { UserModalComponent } from './user-modal/user-modal.component';
 import { UserRequest, UserResponse } from '../../core/interfaces/user-http.interface';
+import { DialogComponent } from '../../shared/components/dialog/dialog.component';
+import { ToastService } from '../../core/services/toast.service';
 
 @Component({
   selector: 'app-user',
   templateUrl: './user-page.component.html',
   imports: [
+    DialogComponent,
     ModalOpenButtonComponent,
     UserTableComponent,
     UserModalComponent
@@ -17,7 +20,8 @@ import { UserRequest, UserResponse } from '../../core/interfaces/user-http.inter
 })
 export default class UserPageComponent {
 
-  userService = inject(UserService);
+  readonly userService = inject(UserService);
+  readonly toastService = inject(ToastService);
 
   search = signal<string>('');
 
@@ -37,6 +41,27 @@ export default class UserPageComponent {
 
     return temporal;
   });
+
+  deleteUser() {
+    this.userService.delete(this.userService.selectedUser?.id ?? '').subscribe({
+      next: () => {
+        this.toastService.addToast({
+          message: 'User deleted successfully',
+          type: 'success',
+          duration: 4000
+        });
+
+        this.reload();
+      },
+      error: (error) => {
+        this.toastService.addToast({
+          message: 'Error deleting user',
+          type: 'error',
+          duration: 4000
+        });
+      }
+    });
+  }
 
   reload() {
     this.users.reload();

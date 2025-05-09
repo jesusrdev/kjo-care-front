@@ -1,46 +1,91 @@
 @import "tailwindcss";
-@plugin "daisyui";
+/* Importaciones de Leaflet - asegurarse de que sean completas */
+@import "leaflet/dist/leaflet.css";
+/* Importamos también el estilo del geocoder si es necesario */
+@import "leaflet-control-geocoder/dist/Control.Geocoder.css";
 
-@plugin "daisyui/theme" {
-  name: dark;
-  default: false;
-  prefersdark: false;
-  color-scheme: dark;
+@plugin "daisyui" {
+  themes: all;
+}
 
-  --color-base-100: oklch(12% 0.042 264.695);
-  --color-base-200: oklch(20% 0.042 265.755);
-  --color-base-300: oklch(27% 0.041 260.031);
-  --color-base-content: oklch(96% 0.007 247.896);
-  --color-primary: oklch(70% 0.183 293.541);
-  --color-primary-content: oklch(28% 0.141 291.089);
-  --color-secondary: oklch(79% 0.209 151.711);
-  --color-secondary-content: oklch(26% 0.065 152.934);
-  --color-accent: oklch(79% 0.209 151.711);
-  --color-accent-content: oklch(26% 0.065 152.934);
-  --color-neutral: oklch(37% 0.044 257.287);
-  --color-neutral-content: oklch(98% 0.003 247.858);
-  --color-info: oklch(60% 0.126 221.723);
-  --color-info-content: oklch(98% 0.019 200.873);
-  --color-success: oklch(62% 0.194 149.214);
-  --color-success-content: oklch(98% 0.018 155.826);
-  --color-warning: oklch(66% 0.179 58.318);
-  --color-warning-content: oklch(98% 0.022 95.277);
-  --color-error: oklch(58% 0.253 17.585);
-  --color-error-content: oklch(96% 0.015 12.422);
+/* Estilos específicos para el mapa de Leaflet */
+#map, .leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
 
-  /* border radius */
-  --radius-selector: 2rem;
-  --radius-field: 0.5rem;
-  --radius-box: 1rem;
+/* Aseguramos que los popups se muestren correctamente sobre el mapa */
+.leaflet-popup-content-wrapper {
+  background-color: var(--color-base-100);
+  color: var(--color-base-content);
+}
 
-  /* base sizes */
-  --size-selector: 0.25rem;
-  --size-field: 0.25rem;
+.leaflet-popup-tip {
+  background-color: var(--color-base-100);
+}
 
-  /* border size */
-  --border: 1.5px;
+/* Añadir al final del archivo */
 
-  /* effects */
-  --depth: 0;
-  --noise: 1;
+/* Estilos para los marcadores personalizados */
+.custom-div-icon {
+  background: transparent;
+  border: none;
+}
+
+.custom-div-icon i {
+  display: block;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-size: 24px !important;
+}
+
+/* Estilos para el panel de sugerencias */
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-radius: 4px;
+}
+
+.suggestion-item:hover {
+  background-color: var(--color-base-200);
+}
+
+.suggestion-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.suggestion-text {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Efecto de pulso para marcadores de hospitales */
+.hospital-marker {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

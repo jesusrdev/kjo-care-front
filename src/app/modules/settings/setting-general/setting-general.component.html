@@ -1,1 +1,44 @@
-<p>setting-general works!</p>,
+<div class="card">
+  <div class="card-body p-1">
+    <h2 class="card-title text-2xl">General Settings</h2>
+    <p class="mb-3">Manage your application settings and preferences.</p>
+
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend text-sm">Application Name</legend>
+      <input
+        type="text"
+        class="input w-full"
+        id="name"
+        readonly
+        [value]="name()"
+      />
+    </fieldset>
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend text-sm">Application Description</legend>
+      <textarea
+        class="textarea w-full"
+        id="description"
+        readonly
+        [value]="description()"
+      ></textarea>
+    </fieldset>
+    <fieldset class="fieldset">
+      <label class="label">
+        <input
+          type="checkbox"
+          class="toggle"
+          id="isInMaintenance"
+          [checked]="isInMaintenance()"
+          disabled
+        />
+        Maintenance Mode
+      </label>
+    </fieldset>
+
+    <div class="card-actions mt-3">
+      <button class="btn" disabled>
+        Save changes
+      </button>
+    </div>
+  </div>
+</div>

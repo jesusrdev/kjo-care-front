@@ -7,13 +7,13 @@ import { environment } from '../../../environments/environment';
 
 import { Blog } from '../models/blog';
 import { blogs } from '../../shared/utils/local-data';
-import { BlogResponse } from '../interfaces/blog-http.interface';
+import { BlogDetailResponse, BlogResponse } from '../interfaces/blog-http.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BlogService {
-  private baseUrl: string = environment.apiUrl + '/blog/blogs';
+  private baseUrl: string = environment.apiUrl + '/api/mind/blog/blogs';
 
   private http = inject(HttpClient);
 
@@ -41,8 +41,8 @@ export class BlogService {
   //   );
   // }
 
-  getById(id: number): Observable<Blog> {
-    return this.http.get<Blog>(`${this.baseUrl}/${id}`);
+  getById(id: number): Observable<BlogDetailResponse> {
+    return this.http.get<BlogDetailResponse>(`${this.baseUrl}/${id}`);
   }
 
   create(request: FormData): Observable<Blog> {

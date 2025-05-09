@@ -1,4 +1,5 @@
-import { Blog, Comment } from '../models/blog';
+import { Blog } from '../models/blog';
+import { UserInfo } from './user-http.interface';
 
 export interface BlogResponse {
   blog: Blog;
@@ -10,6 +11,16 @@ export interface BlogDetailResponse {
   blog: Blog;
   reactionCount: number;
   commentCount: number;
-  comments: Comment[];
+  comments: CommentSummary[];
   accesible: boolean;
+}
+
+export interface CommentSummary {
+  id: number;
+  userId: UserInfo;
+  content: string;
+  date: string;
+  commentDate: string;
+  modifiedDate: string;
+  childrenComments: CommentSummary[];
 }

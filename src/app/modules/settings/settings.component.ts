@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import SettingGeneralComponent from "./setting-general/setting-general.component";
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 interface SettingTabs {
@@ -19,7 +18,7 @@ export default class SettingsComponent {
   settingsTabs = signal<SettingTabs[]>([
     {
       name: 'General',
-      path: '/dashboard/settings',
+      path: '/dashboard/settings/general',
       exact: true
     },
     {
@@ -27,8 +26,8 @@ export default class SettingsComponent {
       path: '/dashboard/settings/mood-states',
     },
     {
-      name: 'Notificaciones',
-      path: '/dashboard/settings/notification',
+      name: 'Categories',
+      path: '/dashboard/settings/category',
     }
   ]);
 }

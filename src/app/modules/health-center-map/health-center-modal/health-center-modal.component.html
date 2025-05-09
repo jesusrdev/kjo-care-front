@@ -1,0 +1,173 @@
+<dialog id="modal_health_center" class="modal">
+  <div class="modal-box max-h-11/12 w-11/12 max-w-xl">
+    <!-- X BUTTON -->
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+        <i class="material-icons-outlined !text-xl">close</i>
+      </button>
+    </form>
+
+    <h2 class="text-lg font-semibold">{{ title() }}</h2>
+
+    <form [formGroup]="healthCenterForm" (ngSubmit)="onSubmit()">
+      <div class="space-y-4 mt-4">
+        <!-- Nombre -->
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">Nombre</legend>
+          <input
+            type="text"
+            class="input validator w-full"
+            formControlName="name"
+            placeholder="Centro de Salud"
+            minlength="3"
+            required
+            autocomplete="off"
+          />
+          <p class="validator-hint hidden">
+            {{ formUtils.getFieldError(healthCenterForm, 'name') }}
+          </p>
+        </fieldset>
+
+        <!-- Dirección -->
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">Dirección</legend>
+          <input
+            type="text"
+            class="input validator w-full"
+            formControlName="address"
+            placeholder="Av. Principal 123, Ciudad"
+            required
+            autocomplete="off"
+          />
+          <p class="validator-hint hidden">
+            {{ formUtils.getFieldError(healthCenterForm, 'address') }}
+          </p>
+        </fieldset>
+
+        <!-- Teléfono -->
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">Teléfono</legend>
+          <input
+            type="tel"
+            class="input validator w-full"
+            formControlName="phone"
+            placeholder="999-999-999"
+            autocomplete="off"
+          />
+          <p class="validator-hint hidden">
+            {{ formUtils.getFieldError(healthCenterForm, 'phone') }}
+          </p>
+        </fieldset>
+
+        <!-- Coordenadas -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Latitud -->
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">Latitud</legend>
+            <input
+              type="number"
+              step="0.000001"
+              class="input validator w-full"
+              formControlName="latitude"
+              placeholder="-12.0464"
+              required
+              autocomplete="off"
+              [readonly]="true"
+            />
+            <p class="validator-hint hidden">
+              {{ formUtils.getFieldError(healthCenterForm, 'latitude') }}
+            </p>
+          </fieldset>
+
+          <!-- Longitud -->
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">Longitud</legend>
+            <input
+              type="number"
+              step="0.000001"
+              class="input validator w-full"
+              formControlName="longitude"
+              placeholder="-77.0428"
+              required
+              autocomplete="off"
+              [readonly]="true"
+            />
+            <p class="validator-hint hidden">
+              {{ formUtils.getFieldError(healthCenterForm, 'longitude') }}
+            </p>
+          </fieldset>
+        </div>
+
+        <!-- Botón para abrir el selector de coordenadas -->
+        <button
+          type="button"
+          class="btn btn-outline btn-block"
+          (click)="openCoordinatesModal()">
+          <i class="material-icons-outlined !text-xl mr-2">map</i>
+          Seleccionar coordenadas en el mapa
+        </button>
+      </div>
+
+      <div class="modal-action mt-4">
+        <form method="dialog" class="space-x-2">
+          <button class="btn">Cancelar</button>
+
+          <button
+            class="btn btn-primary"
+            [disabled]="healthCenterForm.invalid"
+            type="submit"
+            (click)="onSubmit()"
+          >
+            {{ nameButton() }}
+          </button>
+        </form>
+      </div>
+    </form>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
+
+<!-- Modal del mapa para seleccionar coordenadas -->
+<dialog id="modal_coordinates_selector" class="modal">
+  <div class="modal-box max-h-11/12 w-11/12 max-w-xl">
+    <!-- X BUTTON -->
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+        <i class="material-icons-outlined !text-xl">close</i>
+      </button>
+    </form>
+
+    <h2 class="text-lg font-semibold">Seleccionar Ubicación</h2>
+    <p class="text-sm text-gray-500 mb-4">Haz clic en el mapa para seleccionar las coordenadas</p>
+
+    <!-- Mapa para seleccionar coordenadas -->
+    <div class="h-96 w-full bg-base-200 rounded-md overflow-hidden">
+      <div id="coordinatesMap" class="w-full h-full"></div>
+    </div>
+
+    <!-- Coordenadas seleccionadas -->
+    <div class="mt-4 flex items-center gap-4">
+      <div class="flex-1">
+        <p class="text-sm font-medium">Coordenadas seleccionadas:</p>
+        <p class="text-sm">Lat: {{ selectedLat }}, Lng: {{ selectedLng }}</p>
+      </div>
+      <button
+        class="btn btn-primary"
+        (click)="saveCoordinates()"
+        [disabled]="!selectedLat || !selectedLng">
+        Guardar coordenadas
+      </button>
+    </div>
+
+    <div class="modal-action">
+      <form method="dialog">
+        <button class="btn">Cancelar</button>
+      </form>
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>

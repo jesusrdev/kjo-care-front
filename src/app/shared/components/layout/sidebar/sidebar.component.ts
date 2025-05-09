@@ -22,7 +22,7 @@ export class SidebarComponent {
     },
     {
       name: 'Health Centers',
-      path: '/dashboard/health-centers'
+      path: '/dashboard/map'
     },
     {
       name: 'Recursos de Emergencia',

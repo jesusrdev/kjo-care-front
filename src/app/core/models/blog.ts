@@ -32,15 +32,6 @@ export interface Reaction {
   reaction: string;
 }
 
-export interface Comment {
-  id: number;
-  blogId: number;
-  userId: number;
-  content: string;
-  commentDate: string;
-  commentParentId: number;
-}
-
 export interface FilterDTO {
   search: string;
   category: number;

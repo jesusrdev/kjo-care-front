@@ -1,0 +1,115 @@
+<div class="flex justify-between items-center gap-2 my-5">
+  <label class="input w-full flex-2/3">
+    <i class="material-symbols-outlined !text-xl">search</i>
+    <input
+      type="search"
+      class="w-full"
+      [value]="search()"
+      placeholder="Search resources..."
+      (input)="search.set(searchInput.value)"
+      #searchInput
+    />
+  </label>
+  <select
+    class="select w-full flex-1/3"
+    [value]="orderBy()"
+    (change)="orderBy.set(orderByInput.value)"
+    #orderByInput
+  >
+    <option value="newest">Newest First</option>
+    <option value="oldest">Oldest First</option>
+    <option value="+access">Most accessed</option>
+    <option value="-access">Least accessed</option>
+  </select>
+</div>
+
+<div class="overflow-x-auto">
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Contacts</th>
+      <th>Links</th>
+      <th>Status</th>
+      <th>Access Count</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+      @if (resources().isLoading()) {
+        <div class="flex justify-center p-4">
+          <span class="loading loading-spinner loading-lg text-primary"></span>
+        </div>
+      } @else if (resources().error()) {
+        <td colspan="7">
+          <div class="alert alert-error mt-4">
+            <i class="material-symbols-outlined !text-xl">error</i>
+            <span>Error al cargar los recursos de emergencia. Por favor intenta de nuevo.</span>
+            <button class="btn btn-sm" (click)="reload()">
+              Retry
+            </button>
+          </div>
+        </td>
+      } @else {
+        @for (resource of filteredResources(); track resource.id) {
+          <tr class="hover:bg-base-200">
+            <td class="truncate">{{ resource.name }}</td>
+            <td class="truncate max-w-64">{{ resource.description }}</td>
+            <td>
+              <div class="flex items-center gap-1">
+                <i class="material-symbols-outlined !text-xl">phone</i>
+                <span>{{ resource.contacts.at(0) }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="flex items-center gap-1 max-w-54">
+                <i class="material-symbols-outlined !text-xl">link</i>
+                <a class="truncate link" href="{{ resource.links.at(0) }}">{{ resource.links.at(0) }}</a>
+              </div>
+            </td>
+            <td>
+              @if (resource.status == 'ACTIVE') {
+                <span class="badge badge-primary">Active</span>
+              } @else {
+                <span class="badge badge-neutral">Inactive</span>
+              }
+            </td>
+            <td class="text-center">{{ resource.accessCount }}</td>
+            <td class="flex items-center gap-1">
+              <modal-open-button
+                [modalName]="'modal_emergency_resource_detail'"
+                [type]="'icon'"
+                (click)="resourceService.selectedResource.set(resource)"
+              >
+                <i class="material-symbols-outlined !text-xl">visibility</i>
+              </modal-open-button>
+
+              <modal-open-button
+                [modalName]="'modal_emergency_resource'"
+                [type]="'icon'"
+                (click)="resourceService.selectedResource.set(resource)"
+              >
+                <i class="material-symbols-outlined !text-xl">edit_square</i>
+              </modal-open-button>
+
+              <modal-open-button
+                [modalName]="'modal_emergency_resource_delete'"
+                [type]="'icon'"
+                (click)="resourceService.selectedResource.set(resource)"
+              >
+                <i class="material-symbols-outlined !text-xl">delete</i>
+              </modal-open-button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="7" class="text-center">
+              <p class="">No users found.</p>
+            </td>
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>

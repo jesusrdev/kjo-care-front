@@ -1,0 +1,132 @@
+<div class="flex justify-center w-full p-4">
+  <div class="card w-full max-w-md bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300">
+    <!-- Card Header -->
+    <div class="bg-primary text-primary-content p-6">
+      <h2 class="text-center text-2xl font-bold flex justify-center items-center gap-2 mb-1">
+        <i class="material-icons">analytics</i>
+        Análisis de Tendencias
+      </h2>
+      <div class="text-center opacity-80 text-sm">
+        {{ loadTrendsAnalysis.value()?.timePeriod || 'Cargando...' }}
+      </div>
+    </div>
+
+    @if (loadTrendsAnalysis.isLoading()) {
+      <div class="flex justify-center items-center p-10">
+        <span class="loading loading-spinner loading-lg text-primary"></span>
+      </div>
+    }
+    @else if (loadTrendsAnalysis.error()) {
+      <div class="alert alert-error m-4">
+        <i class="material-icons">error_outline</i>
+        <span>Error al cargar los datos de tendencias</span>
+        <button class="btn btn-sm btn-outline" (click)="loadTrendsAnalysis.reload()">
+          <i class="material-icons text-sm">refresh</i>
+        </button>
+      </div>
+    }
+    @else if (loadTrendsAnalysis.value()) {
+      <div class="p-6 space-y-6">
+        <!-- Total Entries -->
+        <div class="flex items-center gap-4">
+          <div class="bg-base-200 rounded-full w-16 h-16 flex justify-center items-center">
+            <i class="material-icons text-3xl text-primary">bar_chart</i>
+          </div>
+          <div>
+            <div class="text-sm text-base-content/70">Total de entradas</div>
+            <div class="text-2xl font-bold">{{ loadTrendsAnalysis.value()!.totalEntries }}</div>
+          </div>
+        </div>
+
+        <!-- Most Common Mood -->
+        <div class="flex flex-col gap-2">
+          <div class="text-sm font-medium text-base-content/70">Estado de ánimo más común</div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="badge badge-lg"
+                [ngClass]="{
+                  'badge-success': loadTrendsAnalysis.value()!.mostCommonMood === 'Happy',
+                  'badge-info': loadTrendsAnalysis.value()!.mostCommonMood === 'Neutral',
+                  'badge-warning': loadTrendsAnalysis.value()!.mostCommonMood === 'Anxious',
+                  'badge-error': loadTrendsAnalysis.value()!.mostCommonMood === 'Sad',
+                  'badge-accent': loadTrendsAnalysis.value()!.mostCommonMood === 'Energetic'
+                }">
+                <i class="material-icons text-sm">{{ getMoodIcon(loadTrendsAnalysis.value()!.mostCommonMood) }}</i>
+              </div>
+              <div class="font-semibold">{{ loadTrendsAnalysis.value()!.mostCommonMood }}</div>
+            </div>
+            <div class="radial-progress text-primary"
+              [style.--value]="loadTrendsAnalysis.value()!.mostCommonMoodPercentage"
+              [style.--size]="'3rem'"
+              [style.--thickness]="'3px'">
+              <span class="text-xs font-medium">{{ loadTrendsAnalysis.value()!.mostCommonMoodPercentage }}%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <div class="text-sm font-medium text-base-content/70">Nivel de variabilidad</div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="badge badge-lg"
+                [ngClass]="{
+                  'badge-success': loadTrendsAnalysis.value()!.variabilityLevel === 'Low',
+                  'badge-warning': loadTrendsAnalysis.value()!.variabilityLevel === 'Moderate',
+                  'badge-error': loadTrendsAnalysis.value()!.variabilityLevel === 'High'
+                }">
+                <i class="material-icons text-sm">
+                  {{ loadTrendsAnalysis.value()!.variabilityLevel === 'Low' ? 'waves' :
+                      loadTrendsAnalysis.value()!.variabilityLevel === 'Moderate' ? 'water' : 'tsunami' }}
+                </i>
+              </div>
+              <div class="font-semibold">{{ loadTrendsAnalysis.value()!.variabilityLevel }}</div>
+            </div>
+            <div class="flex items-center gap-1">
+              <span class="text-lg font-bold">{{ loadTrendsAnalysis.value()!.variabilityScore }}</span>
+              <span class="text-xs text-base-content/70">/ 3</span>
+            </div>
+          </div>
+          <div class="w-full bg-base-200 rounded-full h-2.5 mt-1">
+            <div class="h-2.5 rounded-full transition-all duration-700"
+              [style.width.%]="(loadTrendsAnalysis.value()!.variabilityScore / 3) * 100"
+              [ngClass]="{
+                'bg-success': loadTrendsAnalysis.value()!.variabilityLevel === 'Low',
+                'bg-warning': loadTrendsAnalysis.value()!.variabilityLevel === 'Moderate',
+                'bg-error': loadTrendsAnalysis.value()!.variabilityLevel === 'High'
+              }">
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <div class="text-sm font-medium text-base-content/70">Dirección de tendencia</div>
+          <div class="flex items-center gap-2">
+            <div class="badge badge-lg"
+              [ngClass]="{
+                'badge-success': loadTrendsAnalysis.value()!.trendDirection === 'Improving',
+                'badge-warning': loadTrendsAnalysis.value()!.trendDirection === 'Stable',
+                'badge-error': loadTrendsAnalysis.value()!.trendDirection === 'Declining'
+              }">
+              <i class="material-icons">
+                {{ loadTrendsAnalysis.value()!.trendDirection === 'Improving' ? 'trending_up' :
+                    loadTrendsAnalysis.value()!.trendDirection === 'Stable' ? 'trending_flat' : 'trending_down' }}
+              </i>
+            </div>
+            <div class="font-semibold">{{ loadTrendsAnalysis.value()!.trendDirection }}</div>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <div class="text-sm font-medium text-base-content/70">Puntuación semanal de tendencia</div>
+          <div class="text-lg font-bold" [ngClass]="{
+            'text-success': loadTrendsAnalysis.value()!.weeklyTrendScore > 0,
+            'text-error': loadTrendsAnalysis.value()!.weeklyTrendScore < 0,
+            'text-base-content': loadTrendsAnalysis.value()!.weeklyTrendScore === 0
+          }">
+            {{ loadTrendsAnalysis.value()!.weeklyTrendScore }}
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

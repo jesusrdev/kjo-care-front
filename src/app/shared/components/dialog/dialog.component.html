@@ -1,0 +1,27 @@
+<dialog id="{{ modalName() }}" class="modal">
+  <div class="modal-box max-h-11/12">
+    <!-- X BUTTON -->
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+        <i class="material-icons-outlined !text-xl">close</i>
+      </button>
+    </form>
+
+    <h2 class="text-xl font-semibold">{{ title() }}</h2>
+
+    <div class="py-3 text-base opacity-80">
+      <span>{{ message() }}</span>
+    </div>
+
+    <div class="modal-action mt-4">
+      <form method="dialog" class="space-x-2">
+        <button class="btn">Close</button>
+        <button class="btn btn-primary" (click)="doCallback()">{{ buttonText() }}</button>
+      </form>
+
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>

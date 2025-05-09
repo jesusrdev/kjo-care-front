@@ -39,3 +39,11 @@
   [user]="this.userService.selectedUser"
   (reload)="reload()"
 ></user-modal>
+
+<app-dialog
+  [title]="'Delete user'"
+  [message]="'Are you sure you want to delete this user?'"
+  [modalName]="'modal_user_delete'"
+  [buttonText]="'Delete'"
+  (callback)="deleteUser()"
+></app-dialog>

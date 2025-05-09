@@ -1,0 +1,61 @@
+<dialog id="modal_health_center_detail" class="modal">
+  <div class="modal-box w-11/12 max-w-xl max-h-11/12">
+    <!-- X BUTTON -->
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+        <i class="material-icons-outlined !text-xl">close</i>
+      </button>
+    </form>
+
+    <h2 class="text-xl font-semibold">{{ healthCenter().name }}</h2>
+    <p class="text-sm opacity-80 mt-1">{{ healthCenter().address }}</p>
+
+
+    <div class="space-y-4 pt-4">
+      <!-- Mapa con marcador -->
+      <div class="h-64 w-full bg-base-200 rounded-md overflow-hidden border border-base-300">
+        <div id="detailMap" class="w-full h-full"></div>
+      </div>
+
+      <div class="flex">
+        <p class="text-sm font-medium">Teléfono:</p>
+        <p class="text-sm opacity-80">{{ healthCenter().phone || 'No disponible' }}</p>
+      </div>
+
+
+      <div>
+        <p class="text-sm font-medium">Coordenadas:</p>
+        <p class="text-sm opacity-80">Lat: {{ healthCenter().latitude }}, Lng: {{ healthCenter().longitude }}</p>
+      </div>
+
+      <div class="flex items-center">
+      <span class="badge badge-outline" [class.badge-primary]="healthCenter().status === 'ACTIVE'"
+            [class.badge-neutral]="healthCenter().status === 'INACTIVE'">
+        {{ healthCenter().status }}
+      </span>
+      </div>
+
+      <div class="text-sm opacity-80 flex justify-between items-center gap-2 flex-wrap">
+        <span>Creado: {{ healthCenter().createdDate | date }}</span>
+        <span>Modificado: {{ healthCenter().modifiedDate | date }}</span>
+      </div>
+    </div>
+
+    <div class="modal-action mt-4">
+      <form method="dialog" class="space-x-2">
+        <button class="btn">Cerrar</button>
+
+        <modal-open-button
+          [modalName]="'modal_health_center'"
+          [label]="'Editar'"
+          [classes]="'btn-primary'"
+        >
+          <i class="material-icons-outlined !text-xl mr-2">edit</i>
+        </modal-open-button>
+      </form>
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>

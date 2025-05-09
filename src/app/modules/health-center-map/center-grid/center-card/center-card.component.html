@@ -1,0 +1,32 @@
+<div class="card bg-base-100 shadow-sm border-[0.5px] border-base-300 h-full">
+  <div class="card-body justify-between">
+    <div class="flex flex-col">
+      <div class="flex items-center justify-between">
+        <h2 class="card-title line-clamp-2">{{ center().name }}</h2>
+        <center-card-options-button [center]="center()" />
+      </div>
+      <div class="flex items-center gap-2 text-xs opacity-80">
+        <span class="line-clamp-2">{{ center().address }}</span>
+      </div>
+      <p class="text-sm my-3">Phone: {{ center().phone }}</p>
+    </div>
+    <div class="card-actions justify-between items-center">
+      @if (center().status == 'ACTIVE') {
+        <div class="badge badge-primary">
+          Active
+        </div>
+      } @else {
+        <div class="badge badge-neutral">
+          Inactive
+        </div>
+      }
+      <modal-open-button
+        [modalName]="'modal_health_center_detail'"
+        [label]="'View'"
+        (click)="centerService.selectedCenter.set(center())"
+      >
+        <i class="material-symbols-outlined !text-xl mr-2">visibility</i>
+      </modal-open-button>
+    </div>
+  </div>
+</div>

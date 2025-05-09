@@ -1,0 +1,103 @@
+<article class="space-y-6">
+  <div
+    class="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+  >
+    <h2 class="text-3xl font-semibold">
+      <i class="material-icons align-middle mr-2 text-primary">insights</i>
+      Mood Analytics
+    </h2>
+    <div class="flex items-center gap-2">
+      <div class="relative">
+        <i class="material-icons absolute left-3 top-2.5 opacity-60">date_range</i>
+        <select
+          class="select select-bordered pl-10"
+          [ngModel]="selectedRange()"
+          (ngModelChange)="updateRange($event)"
+          [disabled]="analyticsResource.isLoading()"
+        >
+          @for (range of ranges(); track range) {
+            <option [value]="range">{{ range }}</option>
+          }
+        </select>
+      </div>
+      <button class="btn btn-outline btn-sm" (click)="export()" [disabled]="analyticsResource.isLoading()">
+        <i class="material-icons mr-1">file_download</i>
+        Export
+      </button>
+    </div>
+  </div>
+
+  @if (analyticsResource.isLoading()) {
+    <div class="flex justify-center items-center p-12">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+  } @else if (analyticsResource.error()) {
+    <div class="alert alert-error">
+      <i class="material-icons stroke-current shrink-0">error_outline</i>
+      <span>Error al cargar los datos. Por favor, inténtalo de nuevo.</span>
+      <button class="btn btn-sm" (click)="analyticsResource.reload()">
+        <i class="material-icons text-sm mr-1">refresh</i>
+        Reintentar
+      </button>
+    </div>
+  } @else {
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"
+    >
+      @for (mood of moods(); track mood.label) {
+        <div
+          class="card bg-base-100 shadow-lg rounded-lg p-6 border-t-4 mood-card cursor-pointer"
+          [style.border-color]="mood.color"
+        >
+          <div class="flex items-center">
+            <i class="material-icons mr-2" [style.color]="mood.color">{{ getMoodIcon(mood.label) }}</i>
+            <span class="text-lg font-medium text-gray-600">{{ mood.label }}</span>
+          </div>
+          <h3 class="text-4xl font-bold mt-2 mood-percent" [style.color]="mood.color">
+            <span class="percent-value">{{ mood.percent }}</span><span>%</span>
+          </h3>
+          <p class="text-sm text-gray-500 mt-1">
+            {{ mood.entries | number }} entries
+            <span
+              [ngClass]="{
+                'text-success': mood.delta >= 0,
+                'text-error': mood.delta < 0,
+              }"
+            >
+              @if (mood.delta !== 0) {
+                •
+                <i
+                  class="material-icons text-xs align-text-top">{{ mood.delta >= 0 ? 'trending_up' : 'trending_down' }}</i>
+                {{ mood.delta >= 0 ? "+" : "" }}{{ mood.delta }}%
+              }
+            </span>
+          </p>
+        </div>
+      } @empty {
+        <div class="col-span-full text-center py-8">
+          <i class="material-icons text-5xl opacity-30 mb-2">sentiment_neutral</i>
+          <div class="text-gray-400">No mood data available</div>
+        </div>
+      }
+    </div>
+
+    <div class="tabs tabs-boxed">
+      @for (tab of tabs(); track tab.path) {
+        <a
+          class="tab"
+          [routerLink]="tab.path"
+          routerLinkActive="tab-active"
+          (click)="setActiveTab(tab.name)"
+        >
+          <i class="material-icons text-sm mr-1">{{ tab.icon }}</i>
+          {{ tab.name }}
+        </a>
+      }
+    </div>
+
+    <section class="p-4 bg-base-200 rounded-lg min-h-48">
+      <router-outlet></router-outlet>
+    </section>
+    <setting-analysis/>
+  }
+</article>

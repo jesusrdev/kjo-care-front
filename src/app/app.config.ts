@@ -11,9 +11,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes,
       withViewTransitions({
         skipInitialTransition: false,
-        onViewTransitionCreated: (transitionInfo) => {
-          console.log('Transición creada : ', transitionInfo);
-        }
       })
     ),
     provideHttpClient(

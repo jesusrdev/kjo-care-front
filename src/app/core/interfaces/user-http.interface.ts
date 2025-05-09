@@ -1,6 +1,6 @@
 export interface UserRequest {
-  // username: string;
   id?: string;
+  username: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -8,8 +8,10 @@ export interface UserRequest {
   roles: string[];
 }
 
-export interface UserResponse extends UserRequest {
+export interface UserResponse extends Omit<UserRequest, 'password'> {
   id: string;
   createdTimestamp: number;
   enabled: boolean;
 }
+
+export type UserInfo = Omit<UserRequest, 'password' | 'roles' | 'email'> ;
